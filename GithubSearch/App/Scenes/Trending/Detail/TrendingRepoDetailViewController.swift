@@ -18,7 +18,6 @@ class TrendingRepoDetailViewModel {
     }
 }
 
-
 class TrendingRepoDetailViewController: UIViewController {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
