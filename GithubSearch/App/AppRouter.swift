@@ -13,12 +13,6 @@ class InitialContext {
     let startApp = PublishSubject<Void>()
 }
 
-class TrendingListContext {
-    let showDetail = PublishSubject<TrendingRepoListViewModel.StandardItem>()
-    let showError = PublishSubject<Error>()
-    let disposeFlow = PublishSubject<Void>()
-}
-
 protocol Router {
     var navigationController: UINavigationController { get }
     var recentController: UIViewController? { get }
@@ -40,52 +34,6 @@ extension Router {
     }
 }
 
-class TrendingRepoRouter: Router {
-    private let disposeBag = CompositeDisposable()
-    private let context: TrendingListContext
-
-    let navigationController: UINavigationController
-
-    init(with navigationController: UINavigationController,
-         context: TrendingListContext = TrendingListContext()) {
-        self.navigationController = navigationController
-        self.context = context
-    }
-
-    func run() {
-        let view = TrendingRepoListViewController(with: TrendingRepoListViewModel(with: context))
-        self.navigationController
-            .pushViewController(view, animated: true)
-
-        context.showDetail
-            .map(TrendingRepoDetailViewModel.init(with:))
-            .map(TrendingRepoDetailViewController.init(with:))
-            .map { ($0, true) }
-            .map(navigationController.pushViewController)
-            .subscribe()
-            .disposed(by: disposeBag)
-
-        context.showError
-            .map { ("", $0.localizedDescription) }
-            .map(showAlert)
-            .subscribe()
-            .disposed(by: disposeBag)
-
-        context.disposeFlow
-            .bind { [self] in
-                disposeBag.dispose()
-            }.disposed(by: disposeBag)
-    }
-}
-
-enum MenuEnum {
-    case trending
-
-    func router(with nc: UINavigationController?) -> Router {
-        return TrendingRepoRouter(with: nc ?? UINavigationController())
-    }
-}
-
 class AppRouter: Router, ApplicationProtocol {
     private let disposeBag = CompositeDisposable()
     private let context: InitialContext
@@ -93,7 +41,7 @@ class AppRouter: Router, ApplicationProtocol {
     let navigationController: UINavigationController
 
     init(with navigationController: UINavigationController,
-         context: InitialContext = InitialContext() ) {
+         context: InitialContext = InitialContext()) {
         self.navigationController = navigationController
         self.context = context
     }
@@ -111,7 +59,7 @@ class AppRouter: Router, ApplicationProtocol {
 
         context.startApp
             .map { [self] in navigationController }
-            .map(MenuEnum.trending.router)
+            .map { MenuRouter(with: $0) }
             .map { $0.run() }
             .subscribe()
             .disposed(by: disposeBag)

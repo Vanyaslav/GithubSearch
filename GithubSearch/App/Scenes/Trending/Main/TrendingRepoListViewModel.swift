@@ -56,7 +56,7 @@ class TrendingRepoListViewModel {
     private static var currentPage: UInt = 0
     private static var canReload: Bool = true
 
-    init(with context: TrendingListContext,
+    init(with context: TrendingRepoContext,
          service: DataServices = GithubService()) {
 
         let request = loadData
