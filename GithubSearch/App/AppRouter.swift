@@ -15,14 +15,14 @@ class InitialContext {
 
 protocol Router {
     var navigationController: UINavigationController { get }
-    var recentController: UIViewController? { get }
+    var recentController: UIViewController { get }
 
     func run()
     func showAlert(with title: String, message: String)
 }
 
 extension Router {
-    var recentController: UIViewController? { navigationController.topViewController }
+    var recentController: UIViewController { navigationController.topViewController ?? navigationController }
     
     func showAlert(with title: String = "", message: String) {
         let alert = UIAlertController(title: title,

@@ -8,5 +8,7 @@
 import RxSwift
 
 protocol DataServices {
-    func loadTrendingRepositories(with page: UInt, date: String) -> Observable<RepositoryListResponse>
+    func loadTrendingRepositories(with page: UInt,
+                                  pageOffset: UInt,
+                                  date: String) -> Observable<RepositoryListResponse>
 }

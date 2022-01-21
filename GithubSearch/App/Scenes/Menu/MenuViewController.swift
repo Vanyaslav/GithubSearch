@@ -30,10 +30,9 @@ class MenuViewController: UITabBarController {
         super.init(nibName: nil, bundle: nil)
         let trendingItem = MenuEnum.trending.router()
         trendingItem.run()
-        trendingItem.recentController?.formatTabBarSubViews(with: "Trending")
-        let settingsItem = UIViewController()
-        settingsItem.formatTabBarSubViews(with: "Settings")
-        viewControllers = [trendingItem.recentController ?? UIViewController(), settingsItem]
+        let trendView = trendingItem.recentController.formatTabBarSubViews(with: "Trending")
+        let settingsItem = UIViewController().formatTabBarSubViews(with: "Settings")
+        viewControllers = [trendView, settingsItem]
     }
 
     required init?(coder: NSCoder) {
@@ -43,14 +42,12 @@ class MenuViewController: UITabBarController {
 }
 
 extension UIViewController {
-    func formatTabBarSubViews(with title: String) {
-        guard let nc = navigationController
-        else {
-            return
-        }
+    func formatTabBarSubViews(with title: String) -> UIViewController {
+        let nc = UINavigationController(rootViewController: self)
         nc.tabBarItem.title = title
         nc.navigationBar.prefersLargeTitles = true
-        nc.tabBarItem.image = UIImage(named: "Octocat")
+        nc.tabBarItem.image = UIImage(systemName: "")
         //navigationItem.title = title
+        return nc
     }
 }

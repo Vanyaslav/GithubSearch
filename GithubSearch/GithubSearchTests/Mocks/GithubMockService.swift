@@ -11,9 +11,9 @@ import RxSwift
 @testable import GithubSearch
 
 class GithubMockService: DataServices {
-    
-    
-    public func loadTrendingRepositories(with page: UInt, date: String = "") -> Observable<RepositoryListResponse> {
+    public func loadTrendingRepositories(with page: UInt,
+                                         pageOffset: UInt = 0,
+                                         date: String = "") -> Observable<RepositoryListResponse> {
         Observable.create { observer in
             let file = Bundle(for: GithubMockService.self).path(forResource: "GithubMock", ofType: "json")!
             do {

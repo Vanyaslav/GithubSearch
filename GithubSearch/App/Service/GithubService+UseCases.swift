@@ -9,7 +9,9 @@ import Foundation
 import RxSwift
 
 extension GithubService: DataServices {
-    func loadTrendingRepositories(with page: UInt, date: String) -> Observable<RepositoryListResponse> {
+    func loadTrendingRepositories(with page: UInt,
+                                  pageOffset: UInt,
+                                  date: String) -> Observable<RepositoryListResponse> {
         var urlComponents = searchRepositoriesUrlComponents
         urlComponents.queryItems!.append(URLQueryItem(name: QueryItems.query,
                                                       value: "created:>\(date)"))
@@ -18,7 +20,7 @@ extension GithubService: DataServices {
         urlComponents.queryItems!.append(URLQueryItem(name: QueryItems.order,
                                                       value: ComparisonResult.orderedDescending.param))
         urlComponents.queryItems!.append(URLQueryItem(name: QueryItems.perPage,
-                                                      value: String(AppDefaults.numberOfRepositories)))
+                                                      value: String(pageOffset)))
         urlComponents.queryItems!.append(URLQueryItem(name: QueryItems.page,
                                                       value: String(page)))
         return process(request: authorizedRequest(with: urlComponents))
