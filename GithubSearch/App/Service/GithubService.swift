@@ -8,6 +8,18 @@
 import Foundation
 import RxSwift
 
+// Host
+class GithubService {
+    let host = "https://api.github.com"
+    let searchPath = "/search"
+    let repositoryPath = "/repositories"
+
+    var searchRepositoriesUrlComponents: URLComponents {
+        var url = URLComponents(string: ("\(host)\(searchPath)\(repositoryPath)"))!
+        url.queryItems = [URLQueryItem]()
+        return url
+    }
+}
 // Header
 extension GithubService {
     struct HeaderKey {
@@ -16,6 +28,12 @@ extension GithubService {
 
     struct HeaderValue {
         static let authorization = AppDefaults.apiToken
+    }
+    
+    func authorizedRequest(with url: URLComponents) -> URLRequest {
+        var request = URLRequest(url: url.url!)
+        request.addValue(HeaderValue.authorization, forHTTPHeaderField: HeaderKey.authorization)
+        return request
     }
 }
 // Query
@@ -26,24 +44,6 @@ extension GithubService {
         static let order = "order"
         static let perPage = "per_page"
         static let page = "page"
-    }
-}
-// Host
-extension GithubService {
-    var host: String { "https://api.github.com" }
-    var searchPath: String  { "/search" }
-    var repositoryPath: String { "/repositories" }
-
-    var searchRepositoriesUrlComponents: URLComponents {
-        var url = URLComponents(string: ("\(host)\(searchPath)\(repositoryPath)"))!
-        url.queryItems = [URLQueryItem]()
-        return url
-    }
-
-    func authorizedRequest(with url: URLComponents) -> URLRequest {
-        var request = URLRequest(url: url.url!)
-        request.addValue(HeaderValue.authorization, forHTTPHeaderField: HeaderKey.authorization)
-        return request
     }
 }
 // Error
@@ -86,7 +86,7 @@ extension GithubService.Error: LocalizedError {
     }
 }
 
-class GithubService {
+extension GithubService {
     func process<T: Codable>(request: URLRequest) -> Observable<T> {
         URLSession.shared.rx
             .response(request: request)

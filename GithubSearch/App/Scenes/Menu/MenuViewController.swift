@@ -45,8 +45,8 @@ extension UIViewController {
     func formatTabBarSubViews(with title: String) -> UIViewController {
         let nc = UINavigationController(rootViewController: self)
         nc.tabBarItem.title = title
-        nc.navigationBar.prefersLargeTitles = true
         nc.tabBarItem.image = UIImage(systemName: "")
+        nc.navigationBar.prefersLargeTitles = true
         //navigationItem.title = title
         return nc
     }

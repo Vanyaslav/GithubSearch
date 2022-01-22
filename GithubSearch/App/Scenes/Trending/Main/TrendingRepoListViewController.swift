@@ -13,24 +13,6 @@ extension TrendingRepoListViewController {
     static var standardCellId: String { "TrendingRepoListTableViewCell" }
 }
 
-extension TrendingRepoListViewController: UIScrollViewDelegate {
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView,
-                                   withVelocity velocity: CGPoint,
-                                   targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        let offset = scrollView.contentOffset
-        let bounds = scrollView.bounds
-        let size = scrollView.contentSize
-        let inset = scrollView.contentInset
-
-        let y = offset.y + bounds.size.height - inset.bottom
-        let height = size.height
-
-        if y > height - 50 {
-            viewModel.loadData.onNext(())
-        }
-    }
-}
-
 class TrendingRepoListViewController: UIViewController, UITableViewDelegate {
     private let disposeBag = DisposeBag()
 
@@ -66,6 +48,10 @@ class TrendingRepoListViewController: UIViewController, UITableViewDelegate {
 
         table.rx.modelSelected(TrendingRepoListViewModel.StandardItem.self)
             .bind(to: viewModel.selectedItem)
+            .disposed(by: disposeBag)
+        
+        table.rx.reachedBottom()
+            .bind(to: viewModel.loadData)
             .disposed(by: disposeBag)
 
         return table

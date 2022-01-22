@@ -89,11 +89,10 @@ class TrendingRepoListViewModel {
         loadItems = state.map { $0.allItems }.asDriver()
         isLoading = state.map { $0.isLoading }.asDriver()
         
-        state.map { Self.currentPage = $0.currentPage }
-            .subscribe()
-            .disposed(by: disposeBag)
-        
-        state.map { Self.canReload = $0.canReload }
+        state.map {
+            Self.canReload = $0.canReload
+            Self.currentPage = $0.currentPage
+        }
             .subscribe()
             .disposed(by: disposeBag)
 
