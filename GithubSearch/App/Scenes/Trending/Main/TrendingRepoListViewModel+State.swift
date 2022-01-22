@@ -9,9 +9,13 @@ import Foundation
 
 extension TrendingRepoListViewModel {
     struct State {
-        var currentPage: UInt { UInt(allItems
-                                        .map { $0.items.count }
-                                        .reduce(0, +)) }
+        var currentPage: UInt {
+            UInt(allItems.count)
+        }
+        
+        var numberOfRecords: UInt {
+            UInt(allItems.map { $0.items.count }.reduce(0, +))
+        }
 
         private(set) var allItems: [SectionModel] = []
         private(set) var canReload: Bool = true

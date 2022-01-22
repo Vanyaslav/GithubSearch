@@ -11,6 +11,15 @@
         }
       },
       {
+        "package": "RxFeedback",
+        "repositoryURL": "https://github.com/NoTests/RxFeedback.swift",
+        "state": {
+          "branch": null,
+          "revision": "aa8384081a14af8fb389245fce2eba5776a96d0b",
+          "version": "4.0.0"
+        }
+      },
+      {
         "package": "RxSwift",
         "repositoryURL": "https://github.com/ReactiveX/RxSwift",
         "state": {

@@ -69,7 +69,7 @@ struct RepositoryResponse: Codable {
     let open_issues: Int?
     let open_issues_count: Int?
     let owner: Owner
-    let permissions: Permissions
+    let permissions: Permissions?
     let `private`: Bool
     let pulls_url: String?
     let pushed_at: String?

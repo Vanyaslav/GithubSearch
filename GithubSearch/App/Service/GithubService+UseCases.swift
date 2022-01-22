@@ -23,6 +23,16 @@ extension GithubService: DataServices {
                                                       value: String(pageOffset)))
         urlComponents.queryItems!.append(URLQueryItem(name: QueryItems.page,
                                                       value: String(page)))
-        return process(request: authorizedRequest(with: urlComponents))
+        return process(request: URLRequest(url: urlComponents.url!))
+    }
+    
+    func searchRepositories(with text: String,
+                            page: UInt) -> Observable<RepositoryListResponse> {
+        var urlComponents = searchRepositoriesUrlComponents
+        urlComponents.queryItems!.append(URLQueryItem(name: QueryItems.query,
+                                                      value: text))
+        urlComponents.queryItems!.append(URLQueryItem(name: QueryItems.page,
+                                                      value: String(page)))
+        return process(request: URLRequest(url: urlComponents.url!))
     }
 }
