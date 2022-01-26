@@ -8,16 +8,18 @@
 import Foundation
 import UIKit
 
+enum ApiAccessType {
+    case authenticated, unauthenticated
+}
+
 struct AppDefaults {
-    // api token needs to be replaced with personal one (XXXXXXXX to be replaced)
+    //
+    static let appStyle: AppStyle = .trending
+    // you can make up to 30 requests per minute with authenticated requests. For unauthenticated requests, the rate limit allows you to make up to 10 requests per minute.
+    static let securityType: ApiAccessType = .unauthenticated
+    // in case of using authorized access, the api token needs to be replaced with personal one (XXXXXXXX to be replaced)
     // https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
     static let apiToken = "token XXXXXXXX"
-    // number of days which reflects the trending github repository loaded data in TrendingRepoListViewModel
-    // example value 7 will set the start date a week before today
-    static let trendingPeriod: UInt = 200
-    // number of trending repositories taken by pagination in the table (TrendingRepoListViewController)
-    // Results per page (max 100)
-    static let numberOfRepositories: UInt = 20
 }
 
 protocol UIObjectStyle {

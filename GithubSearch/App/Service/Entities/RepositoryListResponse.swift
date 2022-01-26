@@ -7,13 +7,15 @@
 
 import Foundation
 
+typealias RepositoriesResponse = Result<RepositoryListResponse, GithubService.Error>
+
 struct RepositoryListResponse: Codable {
     let incomplete_results: Bool
-    let items: [RepositoryResponse]?
+    let items: [Repository]?
     let total_count: UInt64
 }
 
-struct RepositoryResponse: Codable {
+struct Repository: Codable {
     let allow_forking: Bool?
     let archive_url: String?
     let archived: Bool?

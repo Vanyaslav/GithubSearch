@@ -12,17 +12,29 @@ import RxSwiftExt
 import Differentiator
 
 extension TrendingRepoListViewModel {
+    // Input data for API request
+    enum requestInputs {
+        // example: value 7 will set the start date a week before today
+        static let date: String = Date.calculateSpecificDate(with: 200)
+        // number of trending repositories taken by pagination in the table (TrendingRepoListViewController) / (max 100)
+        static let resultsPerPage: UInt = 10
+        static let numberOfStars: UInt = 1000
+        static let dataOrder: ComparisonResult = .orderedDescending
+    }
+}
+
+extension TrendingRepoListViewModel {
     struct StandardItem: Equatable {
         let id: String
         let title: String
         let subTitle: String?
         let datum: String?
 
-        init(with itemResponse: RepositoryResponse) {
-            id = String(itemResponse.id)
-            title = itemResponse.name
-            subTitle = itemResponse.description
-            datum = itemResponse.updated_at
+        init(with item: Repository) {
+            id = String(item.id)
+            title = item.name
+            subTitle = item.description
+            datum = item.updated_at
         }
 
         init(id: String, title: String, subTitle: String? = nil, datum: String? = nil) {
@@ -47,28 +59,43 @@ class TrendingRepoListViewModel {
     private let disposeBag = DisposeBag()
     // in
     let loadData = PublishSubject<Void>()
-    let viewDidUnload = PublishSubject<Void>()
+    let viewWillUnload = PublishSubject<Void>()
     let selectedItem = PublishSubject<StandardItem>()
+    let reloadPressed = PublishSubject<Void>()
+    let currentPage = BehaviorRelay<UInt>(value: 0)
     // out
     let isLoading: Driver<Bool>
     let loadItems: Driver<[SectionModel]>
+    let dataInfo: Driver<String>
+    let scrollToFit: Driver<Void>
+    let isReloadVisible: Driver<Bool>
     // inner
-    private static var currentPage: UInt = 0
-    private static var canReload: Bool = true
+    private let isDataAvailble = BehaviorRelay<Bool>(value: true)
 
-    init(with context: TrendingRepoContext,
+    init(with context: TrendingRepo.Context,
          service: DataServices = GithubService()) {
 
-        let request = loadData
-            .filter { Self.canReload }
-            .map { (Self.currentPage,
-                    AppDefaults.numberOfRepositories,
-                    Date.calculateSpecificDate()) }
+        let startLoading = Observable
+            .merge(loadData, reloadPressed)
+            .withLatestFrom(isDataAvailble)
+            .filter { $0 }
+            .map { _ in }
+        
+        let request = startLoading
+            .withLatestFrom(currentPage)
+            .map { page in
+                (page,
+                 requestInputs.resultsPerPage,
+                 requestInputs.date,
+                 requestInputs.numberOfStars,
+                 requestInputs.dataOrder)
+            }
             .flatMapLatest(service.loadTrendingRepositories)
+            .materialize()
             .share()
         
-        let startLoading = loadData
-            .filter { Self.canReload }
+        
+        let startLoadingAction = startLoading
             .map(State.Action.startLoadingData)
         
         let stopLoading = request
@@ -76,37 +103,66 @@ class TrendingRepoListViewModel {
             .map(State.Action.finishLoadingData)
         
         let elements = request
-            .materialize()
             .elements()
-            .map(State.Action.add)
+            .map(State.Action.process)
 
         let state = Observable
-            .merge(elements, startLoading, stopLoading)
+            .merge(elements, startLoadingAction, stopLoading)
             .scan(State()) { state, action in
                  state.apply(action)
             }
 
-        loadItems = state.map { $0.allItems }.asDriver()
-        isLoading = state.map { $0.isLoading }.asDriver()
+        loadItems = state
+            .map { $0.allItems }
+            .distinctUntilChanged()
+            .asDriver()
         
-        state.map {
-            Self.canReload = $0.canReload
-            Self.currentPage = $0.currentPage
-        }
-            .subscribe()
+        isLoading = state
+            .map { $0.isLoading }
+            .distinctUntilChanged()
+            .asDriver()
+        
+        dataInfo = state
+            .map { "\($0.numberOfRecords) records loaded, page: \($0.currentPage)" }
+            .distinctUntilChanged()
+            .asDriver()
+        
+        state
+            .map { $0.currentPage }
+            .distinctUntilChanged()
+            .bind(to: currentPage)
             .disposed(by: disposeBag)
+        
+        state
+            .map{ $0.canReload }
+            .distinctUntilChanged()
+            .bind(to: isDataAvailble)
+            .disposed(by: disposeBag)
+        
+        let failureMessage = state
+            .map { $0.failureTitle }
+            .distinctUntilChanged()
+            .unwrap()
+        
+        isReloadVisible = state
+            .map { $0.isReloadVisible }
+            .distinctUntilChanged()
+            .asDriver()
 
         selectedItem
             .bind(to: context.showDetail)
             .disposed(by: disposeBag)
 
-        request
-            .materialize()
-            .errors()
+        let errors = Observable
+            .merge(request.errors().map { $0.localizedDescription },
+                   failureMessage)
+        errors
             .bind(to: context.showError)
             .disposed(by: disposeBag)
+        
+        scrollToFit = errors.map { _ in }.asDriver()
 
-        viewDidUnload
+        viewWillUnload.debug()
             .bind(to: context.disposeFlow)
             .disposed(by: disposeBag)
     }

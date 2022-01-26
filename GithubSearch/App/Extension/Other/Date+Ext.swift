@@ -8,7 +8,7 @@
 import Foundation
 
 extension Date {
-    static func calculateSpecificDate(with days: Int = Int(AppDefaults.trendingPeriod)) -> String {
+    static func calculateSpecificDate(with days: Int) -> String {
         let today = Date()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "YYYY-MM-dd"

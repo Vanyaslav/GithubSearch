@@ -8,30 +8,32 @@
 import UIKit
 import RxSwift
 
-class TrendingRepoContext {
-    let showDetail = PublishSubject<TrendingRepoListViewModel.StandardItem>()
-    let showError = PublishSubject<Error>()
-    let disposeFlow = PublishSubject<Void>()
-}
-
 class TrendingRepoRouter: Router {
     private let disposeBag = CompositeDisposable()
-    private let context: TrendingRepoContext
+    private let context: TrendingRepo.Context
 
     let navigationController: UINavigationController
 
     init(with navigationController: UINavigationController,
-         context: TrendingRepoContext = TrendingRepoContext()) {
+         context: TrendingRepo.Context = TrendingRepo.Context()) {
         self.navigationController = navigationController
         self.context = context
     }
 
-    func run() {
+    func run(with style: AppStyle) {
         let view = TrendingRepoListViewController(with: TrendingRepoListViewModel(with: context))
-        self.navigationController
-            .pushViewController(view, animated: true)
+        switch style {
+        case .tabBar:
+            navigationController
+                .setViewControllers([view], animated: true)
+        case .trending:
+            navigationController
+                .pushViewController(view, animated: true)
+        case .search:
+            break
+        }
 
-        context.showDetail.debug()
+        context.showDetail
             .map(TrendingRepoDetailViewModel.init(with:))
             .map(TrendingRepoDetailViewController.init(with:))
             .map { ($0, true) }
@@ -40,7 +42,7 @@ class TrendingRepoRouter: Router {
             .disposed(by: disposeBag)
 
         context.showError
-            .map { ("", $0.localizedDescription) }
+            .map { ("", $0) }
             .map(showAlert)
             .subscribe()
             .disposed(by: disposeBag)

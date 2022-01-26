@@ -15,6 +15,31 @@ extension TrendingRepoListViewController {
 
 class TrendingRepoListViewController: UIViewController, UITableViewDelegate {
     private let disposeBag = DisposeBag()
+    
+    private lazy var infoLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        viewModel.dataInfo
+            .drive(label.rx.text)
+            .disposed(by: disposeBag)
+        return label
+    }()
+    
+    private lazy var reloadButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Reload", for: .normal)
+        button.rx.tap
+            .bind(to: viewModel.reloadPressed)
+            .disposed(by: disposeBag)
+        
+        viewModel.isReloadVisible
+            .map { !$0 }
+            .drive(button.rx.isHidden)
+            .disposed(by: disposeBag)
+        
+        return button
+    }()
 
     private lazy var activityIndicatorView: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView(style: .large)
@@ -36,10 +61,9 @@ class TrendingRepoListViewController: UIViewController, UITableViewDelegate {
                        forCellReuseIdentifier: Self.standardCellId)
 
         let dataSource = RxTableViewSectionedReloadDataSource<TrendingRepoListViewModel.SectionModel>(configureCell: { _, tableView, indexPath, item in
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: Self.standardCellId, for: indexPath) as? TrendingRepoListTableViewCell
-            else { return UITableViewCell() }
-            cell.set(with: item)
-            return cell
+            let cell = tableView.dequeueReusableCell(withIdentifier: Self.standardCellId, for: indexPath) as? TrendingRepoListTableViewCell
+            cell?.set(with: item)
+            return cell ?? UITableViewCell()
         })
 
         viewModel.loadItems
@@ -52,6 +76,11 @@ class TrendingRepoListViewController: UIViewController, UITableViewDelegate {
         
         table.rx.reachedBottom()
             .bind(to: viewModel.loadData)
+            .disposed(by: disposeBag)
+        
+        viewModel.scrollToFit
+            .map(table.scrollToBottom)
+            .drive()
             .disposed(by: disposeBag)
 
         return table
@@ -71,17 +100,20 @@ class TrendingRepoListViewController: UIViewController, UITableViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // navigationController?.cleanBar()
+        navigationController?.cleanBar()
         view.backgroundColor = UIColor.background
         // navigationItem.hidesBackButton = true
         navigationController?.isNavigationBarHidden = false
+        
+        navigationItem.titleView = infoLabel
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: reloadButton)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         // moving back in navigation
         if isMovingFromParent {
-            viewModel.viewDidUnload.onNext(())
+            viewModel.viewWillUnload.onNext(())
         }
     }
 }
@@ -105,7 +137,5 @@ extension TrendingRepoListViewController {
             tableView.bottomAnchor
                 .constraint(equalTo: view.bottomAnchor)
         ])
-
-        viewModel.loadData.onNext(())
     }
 }

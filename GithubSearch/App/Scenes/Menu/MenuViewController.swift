@@ -7,47 +7,58 @@
 
 import Foundation
 import UIKit
+import RxSwift
 
-enum MenuEnum {
-    case trending
-
-    func router(with nc: UINavigationController? = nil) -> Router {
-        return TrendingRepoRouter(with: nc ?? UINavigationController())
+enum MenuItem: Int, CaseIterable {
+    case trending, search
+    
+    var icon: UIImage {
+        return UIImage()
+    }
+    
+    var title: String {
+        switch self {
+        case .trending:
+            return "Trending"
+        case .search:
+            return "Search"
+        }
+    }
+    
+    static var basicControllers: [UIViewController] {
+        Self.allCases
+            .map { item -> UINavigationController in
+                let navigation = UINavigationController()
+                navigation.tabBarItem.title = item.title
+                navigation.tabBarItem.image = item.icon
+                return navigation
+            }
     }
 }
 
-class MenuViewModel {
-    init(with context: MenuContext) {
-        
-    }
-}
 
 class MenuViewController: UITabBarController {
-    private let viewModel: MenuViewModel
-
-    init(with viewModel: MenuViewModel) {
-        self.viewModel = viewModel
+    init() {
         super.init(nibName: nil, bundle: nil)
-        let trendingItem = MenuEnum.trending.router()
-        trendingItem.run()
-        let trendView = trendingItem.recentController.formatTabBarSubViews(with: "Trending")
-        let settingsItem = UIViewController().formatTabBarSubViews(with: "Settings")
-        viewControllers = [trendView, settingsItem]
+        viewControllers = MenuItem.basicControllers
+                
+        _ = viewControllers?.enumerated()
+            .map { (offset, element) -> Router? in
+                guard let items = MenuItem(rawValue: offset),
+                      let nc = element as? UINavigationController
+                else { return nil }
+                
+                switch items {
+                case .trending:
+                    return TrendingRepoRouter(with: nc)
+                case .search:
+                    return SearchRepoRouter(with: nc)
+                }
+            }.compactMap { $0 }
+            .map { $0.run(with: .tabBar) }
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-}
-
-extension UIViewController {
-    func formatTabBarSubViews(with title: String) -> UIViewController {
-        let nc = UINavigationController(rootViewController: self)
-        nc.tabBarItem.title = title
-        nc.tabBarItem.image = UIImage(systemName: "")
-        nc.navigationBar.prefersLargeTitles = true
-        //navigationItem.title = title
-        return nc
     }
 }

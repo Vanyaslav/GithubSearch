@@ -8,6 +8,12 @@
 import UIKit
 import RxSwift
 
+enum AppStyle {
+    case tabBar,
+         trending,
+         search
+}
+
 class InitialContext {
     let showWebSite = PublishSubject<String>()
     let startApp = PublishSubject<Void>()
@@ -17,12 +23,14 @@ protocol Router {
     var navigationController: UINavigationController { get }
     var recentController: UIViewController { get }
 
-    func run()
+    func run(with style: AppStyle)
     func showAlert(with title: String, message: String)
 }
 
 extension Router {
-    var recentController: UIViewController { navigationController.topViewController ?? navigationController }
+    var recentController: UIViewController {
+        navigationController.topViewController ?? navigationController
+    }
     
     func showAlert(with title: String = "", message: String) {
         let alert = UIAlertController(title: title,
@@ -46,7 +54,7 @@ class AppRouter: Router, ApplicationProtocol {
         self.context = context
     }
 
-    func run() {
+    func run(with style: AppStyle = AppDefaults.appStyle) {
         let model = InitialViewModel(with: context)
         let view = InitialViewController(with: model)
         navigationController
@@ -59,8 +67,16 @@ class AppRouter: Router, ApplicationProtocol {
 
         context.startApp
             .map { [self] in navigationController }
-            .map { MenuRouter(with: $0) }
-            .map { $0.run() }
+            .map {
+                switch style {
+                case .tabBar:
+                    $0.setViewControllers([MenuViewController()], animated: true)
+                case .trending:
+                    TrendingRepoRouter(with: $0).run(with: style)
+                case .search:
+                    SearchRepoRouter(with: $0).run(with: style)
+                }
+            }
             .subscribe()
             .disposed(by: disposeBag)
     }

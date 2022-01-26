@@ -8,32 +8,48 @@
 import Foundation
 import UIKit
 
+import RxSwift
+import RxCocoa
+
 class TrendingRepoDetailViewModel {
-    let description: String
-    let title: String
+    // in
+    let viewLoaded = PublishSubject<Void>()
+    // out
+    let description: Driver<String>
+    let title: Driver<String>
 
     init(with data: TrendingRepoListViewModel.StandardItem) {
-        title = data.title
-        description = data.subTitle ?? ""
+        title = viewLoaded
+            .mapTo(data.title)
+            .asDriver()
+        
+        description = viewLoaded
+            .mapTo(data.subTitle ?? "")
+            .asDriver()
     }
 }
 
 class TrendingRepoDetailViewController: UIViewController {
+    private let disposeBag = DisposeBag()
+    
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.backgroundColor = .white
         label.font = .systemFont(ofSize: 150)
         label.numberOfLines = 0
-        label.text = viewModel.title
+        viewModel.title
+            .drive(label.rx.text)
+            .disposed(by: disposeBag)
         return label
     }()
 
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
-        label.backgroundColor = .white
         label.font = .systemFont(ofSize: 100)
-        label.numberOfLines = 0
-        label.text = viewModel.description
+        label.numberOfLines = 100
+        label.textColor = .white
+        viewModel.description
+            .drive(label.rx.text)
+            .disposed(by: disposeBag)
         return label
     }()
 
@@ -41,7 +57,7 @@ class TrendingRepoDetailViewController: UIViewController {
         let view = UIStackView(arrangedSubviews: [titleLabel, descriptionLabel])
         view.translatesAutoresizingMaskIntoConstraints = false
         view.axis = .vertical
-        view.spacing = 12
+        view.spacing = 20
         return view
     }()
 
@@ -89,17 +105,21 @@ extension TrendingRepoDetailViewController {
         [scrollView]
             .forEach(view.addSubview)
 
+        let offSet: CGFloat = 16
         let viewSafeLayout = view.safeAreaLayoutGuide
 
         NSLayoutConstraint.activate([
             scrollView.topAnchor
                 .constraint(equalTo: viewSafeLayout.topAnchor),
             scrollView.leadingAnchor
-                .constraint(equalTo: viewSafeLayout.leadingAnchor),
+                .constraint(equalTo: viewSafeLayout.leadingAnchor,
+                           constant: offSet),
             scrollView.centerXAnchor
                 .constraint(equalTo: viewSafeLayout.centerXAnchor),
             scrollView.bottomAnchor
                 .constraint(equalTo: viewSafeLayout.bottomAnchor)
         ])
+        
+        viewModel.viewLoaded.onNext(())
     }
 }

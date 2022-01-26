@@ -24,15 +24,24 @@ class GithubService {
 extension GithubService {
     struct HeaderKey {
         static let authorization = "Authorization"
+        static let accept = "Accept"
     }
 
     struct HeaderValue {
         static let authorization = AppDefaults.apiToken
+        static let accept = "application/vnd.github.v3+json"
     }
     
     func authorizedRequest(with url: URLComponents) -> URLRequest {
         var request = URLRequest(url: url.url!)
+        request.addValue(HeaderValue.accept, forHTTPHeaderField: HeaderKey.accept)
         request.addValue(HeaderValue.authorization, forHTTPHeaderField: HeaderKey.authorization)
+        return request
+    }
+    
+    func unauthorizedRequest(with url: URLComponents) -> URLRequest {
+        var request = URLRequest(url: url.url!)
+        request.addValue(HeaderValue.accept, forHTTPHeaderField: HeaderKey.accept)
         return request
     }
 }
@@ -73,11 +82,11 @@ extension GithubService.Error: LocalizedError {
         case .invalidRequest(_):
             return NSLocalizedString("Invalid url or you might have reached the API limits", comment: "My error")
         case .invalidURL(_):
-            return NSLocalizedString("Undefined error occured!)", comment: "My error")
+            return NSLocalizedString("Undefined error occured!", comment: "My error")
         case .serviceUnvailable(_):
             return NSLocalizedString("Service not available.", comment: "My error")
         case .serviceForbidden(_):
-            return NSLocalizedString("Service forbidden).", comment: "My error")
+            return NSLocalizedString("Service temporary forbidden.", comment: "My error")
         case .useCache:
             return NSLocalizedString("Cache data layer not implemented!", comment: "My error")
         case .unauthorizedRequest(_):
@@ -87,19 +96,25 @@ extension GithubService.Error: LocalizedError {
 }
 
 extension GithubService {
-    func process<T: Codable>(request: URLRequest) -> Observable<T> {
+    func process<T: Codable>(request: URLRequest) -> Observable<Result<T, GithubService.Error>> {
         URLSession.shared.rx
             .response(request: request)
-            .map { result -> Data in
+            .map { result -> Result<T, GithubService.Error> in
                 switch result.response.statusCode {
                 case 200 ..< 300:
-                    return result.data
+                    do {
+                        let result = try JSONDecoder().decode(T.self, from: result.data)
+                        return .success(result)
+                    } catch let error {
+                        throw Error.invalidJSON(error)
+                    }
+                    
                 case 304:
-                    throw Error.useCache
+                    return .failure(Error.useCache)
                 case 401:
                     throw Error.unauthorizedRequest(request)
                 case 403:
-                    throw Error.serviceForbidden(request.url)
+                    return .failure(Error.serviceForbidden(request.url))
                 case 404:
                     throw Error.invalidURL(request.url)
                 case 422:
@@ -109,14 +124,7 @@ extension GithubService {
                 default:
                     throw Error.other
                 }
-            }.map { data in
-                do {
-                    let result = try JSONDecoder().decode(T.self, from: data)
-                    return result
-                } catch let error {
-                    throw Error.invalidJSON(error)
-                }
             }.observe(on: MainScheduler.instance)
-            .asObservable()
+            .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .default))
     }
 }

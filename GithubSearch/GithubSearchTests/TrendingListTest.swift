@@ -12,7 +12,7 @@ import RxSwift
 
 class TrendingListTest: XCTestCase {
     var scheduler: TestScheduler!
-    var context: TrendingListContext!
+    var context: TrendingRepo.Context!
     var viewModel: TrendingRepoListViewModel!
     var disposeBag: DisposeBag!
 
@@ -20,7 +20,7 @@ class TrendingListTest: XCTestCase {
         super.setUp()
         self.scheduler = TestScheduler(initialClock: 0)
         self.disposeBag = DisposeBag()
-        self.context = TrendingListContext()
+        self.context = TrendingRepo.Context()
         self.viewModel = TrendingRepoListViewModel(with: context!, service: GithubMockService())
     }
 
