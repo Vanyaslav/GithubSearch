@@ -34,7 +34,7 @@ class SearchCodeRouter: Router {
         case .tabBar:
             navigationController
                 .setViewControllers([view], animated: true)
-        case .search:
+        case .flow(type: .search(type: .code)):
             navigationController
                 .pushViewController(view, animated: true)
         default:

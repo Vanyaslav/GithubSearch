@@ -32,12 +32,12 @@ extension SearchCodeViewModel {
 
 extension SearchCodeViewModel {
     struct State {
-        var search: String
-        var shouldLoadNextPage: Bool
-        var results: [RepositoryData]
-        var lastError: GithubService.Error?
-        var recentPage: UInt
-        var canReload: Bool
+        let search: String
+        let shouldLoadNextPage: Bool
+        let results: [RepositoryData]
+        let lastError: GithubService.Error?
+        let recentPage: UInt
+        let canReload: Bool
         
         var data: StateData? {
             shouldLoadNextPage
@@ -54,11 +54,9 @@ extension SearchCodeViewModel.State {
 
     static func reduce(state: Self,
                        event: SearchCodeViewModel.Event) -> Self {
-        var result = state
         switch event {
         case .searchChanged(let text):
-            result.search = text
-            result.results = []
+            return searchAction(state: state, search: text)
         case .scrollingNearBottom:
             return loadNextPage(state: state)
         case .response(.success(let response)):
@@ -66,7 +64,17 @@ extension SearchCodeViewModel.State {
         case .response(.failure(let error)):
             return manage(state: state, failure: error)
         }
-        return result
+    }
+}
+
+extension SearchCodeViewModel.State {
+    private static func searchAction(state: Self, search: String) -> Self {
+        return Self(search: search,
+                    shouldLoadNextPage: !search.isEmpty,
+                    results: [],
+                    lastError: nil,
+                    recentPage: state.recentPage,
+                    canReload: state.canReload)
     }
     
     private static func loadNextPage(state: Self) -> Self {

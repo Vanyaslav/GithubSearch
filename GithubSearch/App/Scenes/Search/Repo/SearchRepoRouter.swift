@@ -34,7 +34,7 @@ class SearchRepoRouter: Router {
         case .tabBar:
             navigationController
                 .setViewControllers([view], animated: true)
-        case .search:
+        case .flow(type: .search(type: .repo)):
             navigationController
                 .pushViewController(view, animated: true)
         default:

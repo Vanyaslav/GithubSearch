@@ -10,8 +10,17 @@ import RxSwift
 
 enum AppStyle {
     case tabBar,
-         trending,
-         search
+         flow(type: FlowType)
+         
+    
+    enum FlowType {
+        case search(type: SearchType),
+             trending
+        
+        enum SearchType {
+            case code, repo
+        }
+    }
 }
 
 class InitialContext {
@@ -78,9 +87,11 @@ class AppRouter: Router, ApplicationProtocol {
                 switch style {
                 case .tabBar:
                     $0.setViewControllers([MenuViewController(with: dependency)], animated: true)
-                case .trending:
+                case .flow(type: .trending):
                     TrendingRepoRouter(with: $0, dependency: dependency).run(with: style)
-                case .search:
+                case .flow(type: .search(type: .repo)):
+                    SearchRepoRouter(with: $0, dependency: dependency).run(with: style)
+                case .flow(type: .search(type: .code)):
                     SearchRepoRouter(with: $0, dependency: dependency).run(with: style)
                 }
             }

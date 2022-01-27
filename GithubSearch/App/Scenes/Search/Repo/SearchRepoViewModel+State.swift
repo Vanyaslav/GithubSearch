@@ -32,19 +32,7 @@ extension SearchRepoViewModel {
 
 extension SearchRepoViewModel {
     struct State {
-        var search: String {
-            didSet {
-                if search.isEmpty {
-                    self.shouldLoadNextPage = false
-                    self.results = []
-                    self.lastError = nil
-                    return
-                }
-                self.shouldLoadNextPage = true
-                self.lastError = nil
-            }
-        }
-        
+        var search: String
         var shouldLoadNextPage: Bool
         var results: [RepositoryData]
         var lastError: GithubService.Error?
@@ -71,6 +59,8 @@ extension SearchRepoViewModel.State {
         case .searchChanged(let text):
             result.search = text
             result.results = []
+            result.lastError = nil
+            result.shouldLoadNextPage = !text.isEmpty
         case .scrollingNearBottom:
             result.shouldLoadNextPage = result.canReload
         case .response(.success(let response)):

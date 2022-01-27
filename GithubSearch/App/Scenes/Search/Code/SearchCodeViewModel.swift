@@ -6,6 +6,9 @@
 //
 
 import Foundation
+import RxCocoa
+import RxSwift
+import RxFeedback
 
 extension SearchCodeViewModel {
     // Input data for API request
@@ -29,8 +32,64 @@ extension SearchCodeViewModel {
 }
 
 class SearchCodeViewModel {
+    private let disposeBag = DisposeBag()
+    // in
+    let scrolledBottom = PublishSubject<Void>()
+    let searchInputs = PublishSubject<String>()
+    // out
+    let loadItems = BehaviorRelay<[RepositoryData]> (value: [])
+    
     init(with dependency: AppDefaults.Dependency,
          context: SearchCodeContext) {
         
+        let scrolledBottom = scrolledBottom
+    
+        let triggerLoadNextPage: (Driver<State>) -> Signal<Event> = { state in
+            return state.flatMapLatest { state -> Signal<Event> in
+                if state.shouldLoadNextPage {
+                    return Signal.empty()
+                }
+                
+                return scrolledBottom
+                    .map { _ in Event.scrollingNearBottom }
+                    .asSignal(onErrorSignalWith: Signal.empty())
+            }
+        }
+
+        let bindUI: (Driver<State>) -> Signal<Event> = bind(self) { me, state in
+            let subscriptions = [
+                state.map { $0.lastError?.errorDescription }
+                    .asObservable()
+                    .unwrap()
+                    .bind(to: context.showError),
+                state.map { $0.results }
+                    .drive(me.loadItems)
+            ]
+
+            let events: [Signal<Event>] = [
+                me.searchInputs
+                    .map(Event.searchChanged)
+                    .asSignal(onErrorSignalWith: Signal.empty()),
+                triggerLoadNextPage(state)
+            ]
+
+            return Bindings(subscriptions: subscriptions, events: events)
+        }
+
+        Driver.system(
+            initialState: State.empty,
+            reduce: State.reduce,
+            feedback:
+                bindUI,
+                react(request: { $0.data },
+                      effects: { resource in
+                          dependency.service.searchRepositories(with: resource.search,
+                                                                page: resource.page,
+                                                                perPage: requestInputs.resultsPerPage)
+                              .asSignal(onErrorJustReturn: .failure(.other))
+                              .map(Event.response)
+                      }))
+            .drive()
+            .disposed(by: disposeBag)
     }
 }

@@ -30,10 +30,10 @@ class TrendingRepoRouter: Router {
         case .tabBar:
             navigationController
                 .setViewControllers([view], animated: true)
-        case .trending:
+        case .flow(type: .trending) :
             navigationController
                 .pushViewController(view, animated: true)
-        case .search:
+        default:
             break
         }
 
