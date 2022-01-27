@@ -23,7 +23,7 @@ extension GithubService {
 
 extension GithubService: DataServices {
     func loadTrendingRepositories(with page: UInt,
-                                  pageOffset: UInt,
+                                  itemsPerPage: UInt,
                                   date: String,
                                   stars: UInt,
                                   order: ComparisonResult = .orderedDescending) -> Observable<RepositoriesResponse> {
@@ -35,19 +35,22 @@ extension GithubService: DataServices {
         urlComponents.queryItems!.append(URLQueryItem(name: QueryItems.order,
                                                       value: order.param))
         urlComponents.queryItems!.append(URLQueryItem(name: QueryItems.perPage,
-                                                      value: String(pageOffset)))
+                                                      value: String(itemsPerPage)))
         urlComponents.queryItems!.append(URLQueryItem(name: QueryItems.page,
                                                       value: String(page)))
         return manageRequest(with: urlComponents)
     }
     
     func searchRepositories(with text: String,
-                            page: UInt) -> Observable<RepositoriesResponse> {
+                            page: UInt,
+                            perPage: UInt) -> Observable<RepositoriesResponse> {
         var urlComponents = searchRepositoriesUrlComponents
         urlComponents.queryItems!.append(URLQueryItem(name: QueryItems.query,
                                                       value: text))
         urlComponents.queryItems!.append(URLQueryItem(name: QueryItems.page,
                                                       value: String(page)))
+        urlComponents.queryItems!.append(URLQueryItem(name: QueryItems.perPage,
+                                                      value: String(perPage)))
         return manageRequest(with: urlComponents)
     }
 }

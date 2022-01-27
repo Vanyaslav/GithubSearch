@@ -38,7 +38,7 @@ enum MenuItem: Int, CaseIterable {
 
 
 class MenuViewController: UITabBarController {
-    init() {
+    init(with dependency: AppDefaults.Dependency) {
         super.init(nibName: nil, bundle: nil)
         viewControllers = MenuItem.basicControllers
                 
@@ -50,9 +50,9 @@ class MenuViewController: UITabBarController {
                 
                 switch items {
                 case .trending:
-                    return TrendingRepoRouter(with: nc)
+                    return TrendingRepoRouter(with: nc, dependency: dependency)
                 case .search:
-                    return SearchRepoRouter(with: nc)
+                    return SearchRepoRouter(with: nc, dependency: dependency)
                 }
             }.compactMap { $0 }
             .map { $0.run(with: .tabBar) }

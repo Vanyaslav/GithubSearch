@@ -12,10 +12,14 @@ protocol DataServices {
     var securityType: ApiAccessType { get }
     
     func loadTrendingRepositories(with page: UInt,
-                                  pageOffset: UInt,
+                                  itemsPerPage: UInt,
                                   date: String,
                                   stars: UInt,
                                   order: ComparisonResult) -> Observable<RepositoriesResponse>
+    
+    func searchRepositories(with text: String,
+                            page: UInt,
+                            perPage: UInt) -> Observable<RepositoriesResponse>
 }
 
 enum Result<T, E: Error> {

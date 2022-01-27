@@ -17,8 +17,8 @@ extension TrendingRepoListViewModel {
         // example: value 7 will set the start date a week before today
         static let date: String = Date.calculateSpecificDate(with: 200)
         // number of trending repositories taken by pagination in the table (TrendingRepoListViewController) / (max 100)
-        static let resultsPerPage: UInt = 10
-        static let numberOfStars: UInt = 1000
+        static let resultsPerPage: UInt = 100
+        static let numberOfStars: UInt = 100
         static let dataOrder: ComparisonResult = .orderedDescending
     }
 }
@@ -73,7 +73,7 @@ class TrendingRepoListViewModel {
     private let isDataAvailble = BehaviorRelay<Bool>(value: true)
 
     init(with context: TrendingRepo.Context,
-         service: DataServices = GithubService()) {
+         dependency: AppDefaults.Dependency) {
 
         let startLoading = Observable
             .merge(loadData, reloadPressed)
@@ -90,7 +90,7 @@ class TrendingRepoListViewModel {
                  requestInputs.numberOfStars,
                  requestInputs.dataOrder)
             }
-            .flatMapLatest(service.loadTrendingRepositories)
+            .flatMapLatest(dependency.service.loadTrendingRepositories)
             .materialize()
             .share()
         

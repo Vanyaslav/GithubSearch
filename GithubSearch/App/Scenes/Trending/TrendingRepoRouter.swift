@@ -11,17 +11,21 @@ import RxSwift
 class TrendingRepoRouter: Router {
     private let disposeBag = CompositeDisposable()
     private let context: TrendingRepo.Context
+    private let dependency: AppDefaults.Dependency
 
     let navigationController: UINavigationController
 
     init(with navigationController: UINavigationController,
-         context: TrendingRepo.Context = TrendingRepo.Context()) {
+         context: TrendingRepo.Context = TrendingRepo.Context(),
+         dependency: AppDefaults.Dependency) {
         self.navigationController = navigationController
         self.context = context
+        self.dependency = dependency
     }
 
     func run(with style: AppStyle) {
-        let view = TrendingRepoListViewController(with: TrendingRepoListViewModel(with: context))
+        let view = TrendingRepoListViewController(with: TrendingRepoListViewModel(with: context,
+                                                                                  dependency: dependency))
         switch style {
         case .tabBar:
             navigationController

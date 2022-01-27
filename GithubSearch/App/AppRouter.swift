@@ -19,6 +19,10 @@ class InitialContext {
     let startApp = PublishSubject<Void>()
 }
 
+class AlertContext {
+    let showError = PublishSubject<String>()
+}
+
 protocol Router {
     var navigationController: UINavigationController { get }
     var recentController: UIViewController { get }
@@ -45,13 +49,16 @@ extension Router {
 class AppRouter: Router, ApplicationProtocol {
     private let disposeBag = CompositeDisposable()
     private let context: InitialContext
+    private let dependency: AppDefaults.Dependency
 
     let navigationController: UINavigationController
 
     init(with navigationController: UINavigationController,
-         context: InitialContext = InitialContext()) {
+         context: InitialContext = InitialContext(),
+         dependency: AppDefaults.Dependency = AppDefaults.Dependency()) {
         self.navigationController = navigationController
         self.context = context
+        self.dependency = dependency
     }
 
     func run(with style: AppStyle = AppDefaults.appStyle) {
@@ -67,14 +74,14 @@ class AppRouter: Router, ApplicationProtocol {
 
         context.startApp
             .map { [self] in navigationController }
-            .map {
+            .map { [self] in
                 switch style {
                 case .tabBar:
-                    $0.setViewControllers([MenuViewController()], animated: true)
+                    $0.setViewControllers([MenuViewController(with: dependency)], animated: true)
                 case .trending:
-                    TrendingRepoRouter(with: $0).run(with: style)
+                    TrendingRepoRouter(with: $0, dependency: dependency).run(with: style)
                 case .search:
-                    SearchRepoRouter(with: $0).run(with: style)
+                    SearchRepoRouter(with: $0, dependency: dependency).run(with: style)
                 }
             }
             .subscribe()

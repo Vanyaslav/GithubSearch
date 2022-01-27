@@ -51,7 +51,9 @@ extension TrendingRepoListViewModel {
                                                         .compactMap { StandardItem(with: $0) })!)]
                 state.allItems += newItems
                 state.canReload = response.incomplete_results
-                state.failureTitle = nil
+                state.failureTitle = response.incomplete_results
+                    ? nil
+                    : "There is no more records with givin criteria."
             case .process(.failure(let error)):
                 state.failureTitle = error.errorDescription
             }

@@ -66,6 +66,7 @@ extension GithubService {
         case serviceUnvailable(URL?)
         case serviceForbidden(URL?)
         case useCache
+        case allData
         case other
     }
 }
@@ -91,6 +92,8 @@ extension GithubService.Error: LocalizedError {
             return NSLocalizedString("Cache data layer not implemented!", comment: "My error")
         case .unauthorizedRequest(_):
             return NSLocalizedString("Unauthorized request! You may have forgotten to update AppDefaults with your personal token.", comment: "My error")
+        case .allData:
+            return "All data have been loaded."
         }
     }
 }

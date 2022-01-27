@@ -15,13 +15,17 @@ class TrendingListTest: XCTestCase {
     var context: TrendingRepo.Context!
     var viewModel: TrendingRepoListViewModel!
     var disposeBag: DisposeBag!
+    var mockDependency: AppDefaults.Dependency!
 
     override func setUp() {
         super.setUp()
         self.scheduler = TestScheduler(initialClock: 0)
         self.disposeBag = DisposeBag()
         self.context = TrendingRepo.Context()
-        self.viewModel = TrendingRepoListViewModel(with: context!, service: GithubMockService())
+        self.mockDependency = AppDefaults.Dependency(service: GithubMockService())
+        self.viewModel = TrendingRepoListViewModel(with: context!,
+                                                   dependency: mockDependency)
+        
     }
 
     func testDataConversion() throws {
