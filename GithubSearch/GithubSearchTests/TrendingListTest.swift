@@ -12,7 +12,7 @@ import RxSwift
 
 class TrendingListTest: XCTestCase {
     var scheduler: TestScheduler!
-    var context: TrendingRepo.Context!
+    var context: TrendingRepoContext!
     var viewModel: TrendingRepoListViewModel!
     var disposeBag: DisposeBag!
     var mockDependency: AppDefaults.Dependency!
@@ -21,8 +21,8 @@ class TrendingListTest: XCTestCase {
         super.setUp()
         self.scheduler = TestScheduler(initialClock: 0)
         self.disposeBag = DisposeBag()
-        self.context = TrendingRepo.Context()
-        self.mockDependency = AppDefaults.Dependency(service: GithubMockService())
+        self.context = TrendingRepoContext()
+        self.mockDependency = AppDefaults.Dependency(with: GithubMockService())
         self.viewModel = TrendingRepoListViewModel(with: context!,
                                                    dependency: mockDependency)
         
@@ -31,9 +31,10 @@ class TrendingListTest: XCTestCase {
     func testDataConversion() throws {
         let expectedOutput: [TrendingRepoListViewModel.SectionModel] =
         [TrendingRepoListViewModel.SectionModel(model: .standard,
-                                                items: [TrendingRepoListViewModel.SectionModel.Item(id: "44838949",
-                                                                                                    title: "swift",
-                                                                                                    subTitle: "The Swift Programming Language")
+                                                items: [TrendingRepoListViewModel
+                                                            .SectionModel.Item(id: "44838949",
+                                                                               title: "swift",
+                                                                               subTitle: "The Swift Programming Language")
                                                       ]
                                                )]
 

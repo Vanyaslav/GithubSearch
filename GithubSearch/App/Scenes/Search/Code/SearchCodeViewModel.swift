@@ -98,11 +98,7 @@ class SearchCodeViewModel {
                 react(request: { $0.data },
                       effects: { resource in
                           dependency.service.searchCode(with: requestInputs.defaultUserSearch + resource.search,
-                                                        prefix: requestInputs.defaultRepoSearch,
-                                                        page: resource.page,
-                                                        perPage: requestInputs.resultsPerPage,
-                                                        date: requestInputs.date,
-                                                        order: requestInputs.dataOrder)
+                                                        prefix: requestInputs.defaultRepoSearch)
                               .asSignal(onErrorJustReturn: .failure(.generic))
                               .map(Event.response)
                       }))

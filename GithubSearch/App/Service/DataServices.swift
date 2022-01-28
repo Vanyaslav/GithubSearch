@@ -22,11 +22,7 @@ protocol DataServices {
                             perPage: UInt) -> Observable<RepositoriesResponse>
 
     func searchCode(with text: String,
-                    prefix: String,
-                    page: UInt,
-                    perPage: UInt,
-                    date: String,
-                    order: ComparisonResult) -> Observable<SearchCodeResponse>
+                    prefix: String) -> Observable<SearchCodeResponse>
 }
 
 enum Result<T, E: Error> {

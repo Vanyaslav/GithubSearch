@@ -11,6 +11,10 @@ import RxSwift
 @testable import GithubSearch
 
 class GithubMockService: DataServices {
+    func searchCode(with text: String, prefix: String) -> Observable<SearchCodeResponse> {
+        Observable.empty()
+    }
+
     var securityType: ApiAccessType { .unauthenticated }
     
     public func loadTrendingRepositories(with page: UInt,

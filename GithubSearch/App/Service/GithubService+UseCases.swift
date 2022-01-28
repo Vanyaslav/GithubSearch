@@ -55,11 +55,7 @@ extension GithubService: DataServices {
     }
 
     func searchCode(with text: String,
-                    prefix: String,
-                    page: UInt,
-                    perPage: UInt,
-                    date: String,
-                    order: ComparisonResult = .orderedDescending) -> Observable<SearchCodeResponse> {
+                    prefix: String) -> Observable<SearchCodeResponse> {
         var urlComponents = searchCodeUrlComponents
         urlComponents.queryItems!.append(URLQueryItem(name: QueryItems.query,
                                                       value: String(prefix)))
