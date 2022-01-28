@@ -10,14 +10,14 @@ import RxSwift
 @testable import GithubSearch
 
 class InitialViewModelTest: XCTestCase {
-    var context: InitialContext!
+    var context: AppContext!
     var viewModel: InitialViewModel!
     var disposeBag: DisposeBag!
 
     override func setUp() {
         super.setUp()
         self.disposeBag = DisposeBag()
-        self.context = InitialContext()
+        self.context = AppContext()
         self.viewModel = InitialViewModel(with: context)
     }
 

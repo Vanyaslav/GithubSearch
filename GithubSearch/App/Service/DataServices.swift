@@ -20,6 +20,13 @@ protocol DataServices {
     func searchRepositories(with text: String,
                             page: UInt,
                             perPage: UInt) -> Observable<RepositoriesResponse>
+
+    func searchCode(with text: String,
+                    prefix: String,
+                    page: UInt,
+                    perPage: UInt,
+                    date: String,
+                    order: ComparisonResult) -> Observable<SearchCodeResponse>
 }
 
 enum Result<T, E: Error> {

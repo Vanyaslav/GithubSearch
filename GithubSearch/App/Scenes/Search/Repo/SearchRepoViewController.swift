@@ -63,12 +63,14 @@ class SearchRepoViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }
 
 extension SearchRepoViewController {
     override func loadView() {
         super.loadView()
+
+        navigationController?.cleanBar()
+        view.backgroundColor = UIColor.background
         
         [searchTextBar, searchResultsTable]
             .forEach(view.addSubview)

@@ -13,9 +13,16 @@ class GithubService {
     let host = "https://api.github.com"
     let searchPath = "/search"
     let repositoryPath = "/repositories"
+    let codePath = "/code"
 
     var searchRepositoriesUrlComponents: URLComponents {
         var url = URLComponents(string: ("\(host)\(searchPath)\(repositoryPath)"))!
+        url.queryItems = [URLQueryItem]()
+        return url
+    }
+
+    var searchCodeUrlComponents: URLComponents {
+        var url = URLComponents(string: ("\(host)\(searchPath)\(codePath)"))!
         url.queryItems = [URLQueryItem]()
         return url
     }
@@ -68,6 +75,7 @@ extension GithubService {
         case useCache
         case allData
         case other
+        case generic
     }
 }
 
@@ -78,10 +86,10 @@ extension GithubService.Error: LocalizedError {
             return NSLocalizedString("Undefined error occured!", comment: "My error")
         case .invalidResponse(_):
             return NSLocalizedString("Invalid response!", comment: "My error")
-        case .invalidJSON(_):
-            return NSLocalizedString("JSON response not valid!.", comment: "My error")
+        case .invalidJSON(let error):
+            return error.localizedDescription
         case .invalidRequest(_):
-            return NSLocalizedString("Invalid url or you might have reached the API limits", comment: "My error")
+            return NSLocalizedString("Correct your imputs.", comment: "My error")
         case .invalidURL(_):
             return NSLocalizedString("Undefined error occured!", comment: "My error")
         case .serviceUnvailable(_):
@@ -94,12 +102,14 @@ extension GithubService.Error: LocalizedError {
             return NSLocalizedString("Unauthorized request! You may have forgotten to update AppDefaults with your personal token.", comment: "My error")
         case .allData:
             return "All data have been loaded."
+        case .generic:
+            return "Something went wrong."
         }
     }
 }
 
 extension GithubService {
-    func process<T: Codable>(request: URLRequest) -> Observable<Result<T, GithubService.Error>> {
+    func process<T: Decodable>(request: URLRequest) -> Observable<Result<T, GithubService.Error>> {
         URLSession.shared.rx
             .response(request: request)
             .map { result -> Result<T, GithubService.Error> in
@@ -121,7 +131,7 @@ extension GithubService {
                 case 404:
                     throw Error.invalidURL(request.url)
                 case 422:
-                    throw Error.invalidRequest(request)
+                    return .failure(Error.invalidRequest(request))
                 case 503:
                     throw Error.serviceUnvailable(request.url)
                 default:

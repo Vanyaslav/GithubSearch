@@ -11,7 +11,7 @@ import RxSwift
 extension GithubService {
     var securityType: ApiAccessType { AppDefaults.securityType }
     
-    func manageRequest(with components: URLComponents) -> Observable<RepositoriesResponse> {
+    func manageRequest<T: Decodable>(with components: URLComponents) -> Observable<Result<T, GithubService.Error>> {
         switch securityType {
         case .authenticated:
             return process(request: authorizedRequest(with: components))
@@ -51,6 +51,21 @@ extension GithubService: DataServices {
                                                       value: String(page)))
         urlComponents.queryItems!.append(URLQueryItem(name: QueryItems.perPage,
                                                       value: String(perPage)))
+        return manageRequest(with: urlComponents)
+    }
+
+    func searchCode(with text: String,
+                    prefix: String,
+                    page: UInt,
+                    perPage: UInt,
+                    date: String,
+                    order: ComparisonResult = .orderedDescending) -> Observable<SearchCodeResponse> {
+        var urlComponents = searchCodeUrlComponents
+        urlComponents.queryItems!.append(URLQueryItem(name: QueryItems.query,
+                                                      value: String(prefix)))
+        urlComponents.queryItems!.append(URLQueryItem(name: QueryItems.query,
+                                                      value: text))
+
         return manageRequest(with: urlComponents)
     }
 }

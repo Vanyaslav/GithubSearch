@@ -8,14 +8,32 @@
 import Foundation
 
 typealias RepositoriesResponse = Result<RepositoryListResponse, GithubService.Error>
+typealias SearchCodeResponse = Result<SearchCodeListResponse, GithubService.Error>
 
-struct RepositoryListResponse: Codable {
+struct RepositoryListResponse: Decodable {
     let incomplete_results: Bool
     let items: [Repository]?
     let total_count: UInt64
 }
 
-struct Repository: Codable {
+struct SearchCodeListResponse: Decodable {
+    let incomplete_results: Bool
+    let items: [SearchCode]?
+    let total_count: UInt64
+    let score: Int?
+}
+
+struct SearchCode: Decodable {
+    let name: String
+    let path: String
+    let sha: String
+    let url: String
+    let git_url: String
+    let html_url: String
+    let repository: Repository
+}
+
+struct Repository: Decodable {
     let allow_forking: Bool?
     let archive_url: String?
     let archived: Bool?
@@ -33,35 +51,35 @@ struct Repository: Codable {
     let default_branch: String?
     let deployments_url: String?
     let description: String?
-    let disabled: Bool
-    let downloads_url: String
+    let disabled: Bool?
+    let downloads_url: String?
     let events_url: String?
-    let fork: Bool
+    let fork: Bool?
     let forks: Int?
     let forks_url: String?
-    let full_name: String
+    let full_name: String?
     let git_commits_url: String?
     let git_refs_url: String?
     let git_tags_url: String?
-    let git_url: String
-    let has_downloads: Bool
-    let has_issues: Bool
-    let has_pages: Bool
-    let has_projects: Bool
-    let has_wiki: Bool
+    let git_url: String?
+    let has_downloads: Bool?
+    let has_issues: Bool?
+    let has_pages: Bool?
+    let has_projects: Bool?
+    let has_wiki: Bool?
     let homepage: String?
     let hooks_url: String
-    let html_url: String
+    let html_url: String?
     let id: UInt64
-    let is_template: Bool
+    let is_template: Bool?
     let issue_comment_url: String?
     let issue_events_url: String?
     let issues_url: String?
     let keys_url: String?
     let labels_url: String?
     let language: String?
-    let languages_url: String
-    let license: License
+    let languages_url: String?
+    let license: License?
     let merges_url: String?
     let milestones_url: String?
     let mirror_url: String?
@@ -70,14 +88,14 @@ struct Repository: Codable {
     let notifications_url: String?
     let open_issues: Int?
     let open_issues_count: Int?
-    let owner: Owner
+    let owner: Owner?
     let permissions: Permissions?
     let `private`: Bool
     let pulls_url: String?
     let pushed_at: String?
     let releases_url: String?
-    let score: Int
-    let size: UInt64
+    let score: Int?
+    let size: UInt64?
     let ssh_url: String?
     let stargazers_count: UInt64?
     let stargazers_url: String?
@@ -87,7 +105,7 @@ struct Repository: Codable {
     let svn_url: String?
     let tags_url: String?
     let teams_url: String?
-    let topics: [String]
+    let topics: [String]?
     let trees_url: String
     let updated_at: String?
     let url: String
@@ -96,14 +114,14 @@ struct Repository: Codable {
     let watchers_count: UInt64?
 }
 // TODO
-struct Permissions: Codable {
+struct Permissions: Decodable {
 
 }
 // TODO
-struct Owner: Codable {
+struct Owner: Decodable {
 
 }
 // TODO
-struct License: Codable {
+struct License: Decodable {
 
 }

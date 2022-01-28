@@ -8,9 +8,7 @@
 import UIKit
 import RxSwift
 
-class SearchRepoContext {
-    let showError = PublishSubject<String>()
-}
+class SearchRepoContext: SearchCodeContext {}
 
 class SearchRepoRouter: Router {
     private let disposeBag = CompositeDisposable()
@@ -27,7 +25,7 @@ class SearchRepoRouter: Router {
         self.dependency = dependency
     }
     
-    func run(with style: AppStyle) {
+    func run(with style: AppType) {
         let view = SearchRepoViewController(with: SearchRepoViewModel( with: dependency,
                                                                        context: context))
         switch style {
@@ -38,7 +36,7 @@ class SearchRepoRouter: Router {
             navigationController
                 .pushViewController(view, animated: true)
         default:
-            break
+            return
         }
         
         context.showError

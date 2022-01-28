@@ -17,7 +17,7 @@ extension TrendingRepoListViewModel {
         // example: value 7 will set the start date a week before today
         static let date: String = Date.calculateSpecificDate(with: 200)
         // number of trending repositories taken by pagination in the table (TrendingRepoListViewController) / (max 100)
-        static let resultsPerPage: UInt = 100
+        static let resultsPerPage: UInt = 20
         static let numberOfStars: UInt = 100
         static let dataOrder: ComparisonResult = .orderedDescending
     }
@@ -62,7 +62,6 @@ class TrendingRepoListViewModel {
     let viewWillUnload = PublishSubject<Void>()
     let selectedItem = PublishSubject<StandardItem>()
     let reloadPressed = PublishSubject<Void>()
-    let currentPage = BehaviorRelay<UInt>(value: 0)
     // out
     let isLoading: Driver<Bool>
     let loadItems: Driver<[SectionModel]>
@@ -70,14 +69,15 @@ class TrendingRepoListViewModel {
     let scrollToFit: Driver<Void>
     let isReloadVisible: Driver<Bool>
     // inner
-    private let isDataAvailble = BehaviorRelay<Bool>(value: true)
+    private let currentPage = BehaviorRelay<UInt>(value: 0)
+    private let isDataAvailable = BehaviorRelay<Bool>(value: true)
 
-    init(with context: TrendingRepo.Context,
+    init(with context: TrendingRepoContext,
          dependency: AppDefaults.Dependency) {
 
         let startLoading = Observable
             .merge(loadData, reloadPressed)
-            .withLatestFrom(isDataAvailble)
+            .withLatestFrom(isDataAvailable)
             .filter { $0 }
             .map { _ in }
         
@@ -136,12 +136,11 @@ class TrendingRepoListViewModel {
         state
             .map{ $0.canReload }
             .distinctUntilChanged()
-            .bind(to: isDataAvailble)
+            .bind(to: isDataAvailable)
             .disposed(by: disposeBag)
         
         let failureMessage = state
-            .map { $0.failureTitle }
-            .distinctUntilChanged()
+            .map { $0.failure?.errorDescription }
             .unwrap()
         
         isReloadVisible = state

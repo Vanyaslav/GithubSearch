@@ -35,7 +35,7 @@ class InitialViewModel {
 
     let startApp = PublishSubject<Void>()
 
-    init(with context: InitialContext) {
+    init(with context: AppContext) {
         navigateToMain
             .map { Linx.mainWebSite }
             .bind(to: context.showWebSite)

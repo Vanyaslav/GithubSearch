@@ -7,16 +7,16 @@
 
 import Foundation
 
-extension Array where Element == Repository {
+extension Array where Element == SearchCode {
     var searchCodeResults:  [SearchCodeViewModel.RepositoryData] {
         map { SearchCodeViewModel
-            .RepositoryData(name: $0.name, url: URL(string: $0.url)!)
+                .RepositoryData(name: $0.repository.name, url: URL(string: $0.url)!)
         }
     }
 }
 
 extension SearchCodeViewModel {
-    struct StateData: Equatable {
+    struct StateApiData: Equatable {
         let search: String
         let page: UInt
     }
@@ -25,7 +25,7 @@ extension SearchCodeViewModel {
 extension SearchCodeViewModel {
     enum Event {
         case searchChanged(String)
-        case response(RepositoriesResponse)
+        case response(SearchCodeResponse)
         case scrollingNearBottom
     }
 }
@@ -39,7 +39,7 @@ extension SearchCodeViewModel {
         let recentPage: UInt
         let canReload: Bool
         
-        var data: StateData? {
+        var data: StateApiData? {
             shouldLoadNextPage
                 ? .init(search: search, page: recentPage)
                 : nil
@@ -82,14 +82,14 @@ extension SearchCodeViewModel.State {
             return state
         }
         return Self(search: state.search,
-                    shouldLoadNextPage: true,
+                    shouldLoadNextPage: state.canReload,
                     results: state.results,
                     lastError: state.lastError,
                     recentPage: state.recentPage,
                     canReload: state.canReload)
         }
     
-    private static func manage(state: Self, data: RepositoryListResponse) -> Self {
+    private static func manage(state: Self, data: SearchCodeListResponse) -> Self {
         let itemsToAdd = data.items?.searchCodeResults ?? []
         return Self(search: state.search,
                     shouldLoadNextPage: false,

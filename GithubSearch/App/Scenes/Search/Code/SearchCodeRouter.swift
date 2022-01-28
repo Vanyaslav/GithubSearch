@@ -8,9 +8,7 @@
 import UIKit
 import RxSwift
 
-class SearchCodeContext: AlertContext {
-    
-}
+class SearchCodeContext: AlertContext {}
 
 class SearchCodeRouter: Router {
     private let disposeBag = CompositeDisposable()
@@ -27,7 +25,7 @@ class SearchCodeRouter: Router {
         self.dependency = dependency
     }
     
-    func run(with style: AppStyle) {
+    func run(with style: AppType) {
         let view = SearchCodeViewController(with: SearchCodeViewModel( with: dependency,
                                                                        context: context))
         switch style {
@@ -38,7 +36,7 @@ class SearchCodeRouter: Router {
             navigationController
                 .pushViewController(view, animated: true)
         default:
-            break
+            return
         }
         
         context.showError

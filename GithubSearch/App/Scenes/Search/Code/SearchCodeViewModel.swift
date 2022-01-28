@@ -15,6 +15,16 @@ extension SearchCodeViewModel {
     enum requestInputs {
         // number of trending repositories taken by pagination in the table (TrendingRepoListViewController) / (max 100)
         static let resultsPerPage: UInt = 100
+        // example: value 7 will set the start date a week before today
+        static let date: String = Date.calculateSpecificDate(with: 200)
+        //
+        static let dataOrder: ComparisonResult = .orderedDescending
+        //
+        static let defaultSearch = "org:apple"
+        //
+        static let defaultRepoSearch = "repo:apple/swift"
+        //
+        static let defaultUserSearch = "user:"
     }
 }
 
@@ -37,6 +47,7 @@ class SearchCodeViewModel {
     let scrolledBottom = PublishSubject<Void>()
     let searchInputs = PublishSubject<String>()
     // out
+    let infoDescription = BehaviorRelay<String>(value: "")
     let loadItems = BehaviorRelay<[RepositoryData]> (value: [])
     
     init(with dependency: AppDefaults.Dependency,
@@ -63,7 +74,10 @@ class SearchCodeViewModel {
                     .unwrap()
                     .bind(to: context.showError),
                 state.map { $0.results }
-                    .drive(me.loadItems)
+                    .drive(me.loadItems),
+                state.map { $0.search }
+                    .map { requestInputs.defaultRepoSearch + " " + requestInputs.defaultUserSearch + $0 }
+                    .drive(me.infoDescription)
             ]
 
             let events: [Signal<Event>] = [
@@ -83,10 +97,13 @@ class SearchCodeViewModel {
                 bindUI,
                 react(request: { $0.data },
                       effects: { resource in
-                          dependency.service.searchRepositories(with: resource.search,
-                                                                page: resource.page,
-                                                                perPage: requestInputs.resultsPerPage)
-                              .asSignal(onErrorJustReturn: .failure(.other))
+                          dependency.service.searchCode(with: requestInputs.defaultUserSearch + resource.search,
+                                                        prefix: requestInputs.defaultRepoSearch,
+                                                        page: resource.page,
+                                                        perPage: requestInputs.resultsPerPage,
+                                                        date: requestInputs.date,
+                                                        order: requestInputs.dataOrder)
+                              .asSignal(onErrorJustReturn: .failure(.generic))
                               .map(Event.response)
                       }))
             .drive()

@@ -8,14 +8,15 @@
 import UIKit
 import RxSwift
 
-enum AppStyle {
+enum AppType {
     case tabBar,
          flow(type: FlowType)
          
     
     enum FlowType {
         case search(type: SearchType),
-             trending
+             trending,
+             undefined
         
         enum SearchType {
             case code, repo
@@ -23,7 +24,53 @@ enum AppStyle {
     }
 }
 
-class InitialContext {
+extension AppType.FlowType {
+    var title: String {
+        switch self {
+        case .trending:
+            return "Trending"
+        case .search(type: .code):
+            return "Search code"
+        case .search(type: .repo):
+            return "Search repo"
+        case .undefined:
+            return "??"
+        }
+    }
+
+    var icon: UIImage {
+        return UIImage()
+    }
+
+    static var basicControllers: [UIViewController] {
+        [
+            AppType.FlowType.trending,
+            .search(type: .repo),
+            .search(type: .code)
+        ]
+            .map { item -> UINavigationController in
+                let navigation = UINavigationController()
+                navigation.tabBarItem.title = item.title
+                navigation.tabBarItem.image = item.icon
+                return navigation
+            }
+    }
+
+    init(with value: Int) {
+        switch value {
+        case 0:
+            self = .trending
+        case 1:
+            self = .search(type: .repo)
+        case 2:
+            self = .search(type: .code)
+        default:
+            self = .undefined
+        }
+    }
+}
+
+class AppContext {
     let showWebSite = PublishSubject<String>()
     let startApp = PublishSubject<Void>()
 }
@@ -36,7 +83,7 @@ protocol Router {
     var navigationController: UINavigationController { get }
     var recentController: UIViewController { get }
 
-    func run(with style: AppStyle)
+    func run(with style: AppType)
     func showAlert(with title: String, message: String)
 }
 
@@ -46,31 +93,35 @@ extension Router {
     }
     
     func showAlert(with title: String = "", message: String) {
-        let alert = UIAlertController(title: title,
-                                      message: message,
-                                      preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .cancel))
-        navigationController
-            .present(alert, animated: true)
+        guard navigationController.presentedViewController is UIAlertController
+        else {
+            let alert = UIAlertController(title: title,
+                                          message: message,
+                                          preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+            navigationController
+                .present(alert, animated: true)
+            return
+        }
     }
 }
 
 class AppRouter: Router, ApplicationProtocol {
     private let disposeBag = CompositeDisposable()
-    private let context: InitialContext
+    private let context: AppContext
     private let dependency: AppDefaults.Dependency
 
     let navigationController: UINavigationController
 
     init(with navigationController: UINavigationController,
-         context: InitialContext = InitialContext(),
+         context: AppContext = AppContext(),
          dependency: AppDefaults.Dependency = AppDefaults.Dependency()) {
         self.navigationController = navigationController
         self.context = context
         self.dependency = dependency
     }
 
-    func run(with style: AppStyle = AppDefaults.appStyle) {
+    func run(with style: AppType = AppDefaults.AppType) {
         let model = InitialViewModel(with: context)
         let view = InitialViewController(with: model)
         navigationController
@@ -93,6 +144,8 @@ class AppRouter: Router, ApplicationProtocol {
                     SearchRepoRouter(with: $0, dependency: dependency).run(with: style)
                 case .flow(type: .search(type: .code)):
                     SearchRepoRouter(with: $0, dependency: dependency).run(with: style)
+                case .flow(type: .undefined):
+                    break
                 }
             }
             .subscribe()

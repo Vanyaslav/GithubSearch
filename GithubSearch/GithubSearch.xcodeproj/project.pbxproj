@@ -17,7 +17,6 @@
 		A11C6725279C008E0018E596 /* SearchRepoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11C6724279C008E0018E596 /* SearchRepoViewController.swift */; };
 		A11C6728279C01080018E596 /* RxFeedback in Frameworks */ = {isa = PBXBuildFile; productRef = A11C6727279C01080018E596 /* RxFeedback */; };
 		A11C672B279C34C60018E596 /* SearchRepoRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11C672A279C34C60018E596 /* SearchRepoRouter.swift */; };
-		A11C672D279C567E0018E596 /* TrendingRepo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11C672C279C567E0018E596 /* TrendingRepo.swift */; };
 		A1227CBE278884D7005BC286 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1227CBD278884D7005BC286 /* LaunchScreen.storyboard */; };
 		A149621527882DA30017F68D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A149621427882DA30017F68D /* AppDelegate.swift */; };
 		A149621927882DA30017F68D /* InitialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A149621827882DA30017F68D /* InitialViewController.swift */; };
@@ -81,7 +80,6 @@
 		A104EF51279EA1E800D3831A /* UITableView+Ext .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Ext .swift"; sourceTree = "<group>"; };
 		A11C6724279C008E0018E596 /* SearchRepoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRepoViewController.swift; sourceTree = "<group>"; };
 		A11C672A279C34C60018E596 /* SearchRepoRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRepoRouter.swift; sourceTree = "<group>"; };
-		A11C672C279C567E0018E596 /* TrendingRepo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendingRepo.swift; sourceTree = "<group>"; };
 		A1227CBD278884D7005BC286 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A1227CC0278885E2005BC286 /* GithubSearch-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GithubSearch-Info.plist"; sourceTree = "<group>"; };
 		A149621127882DA30017F68D /* GithubSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GithubSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -364,10 +362,9 @@
 		A1ED877B2788AF3B001254B1 /* Trending */ = {
 			isa = PBXGroup;
 			children = (
-				A11C672C279C567E0018E596 /* TrendingRepo.swift */,
+				A15C1BA9279961DB0096B26A /* TrendingRepoRouter.swift */,
 				A19277972798519300DE5275 /* Detail */,
 				A19277962798518A00DE5275 /* Main */,
-				A15C1BA9279961DB0096B26A /* TrendingRepoRouter.swift */,
 			);
 			path = Trending;
 			sourceTree = "<group>";
@@ -535,7 +532,6 @@
 				A10062ED27887FA900E9C697 /* AppRouter.swift in Sources */,
 				A1E135D727A17B0F005A18F2 /* SearchRepoViewModel.swift in Sources */,
 				A194F5402789BD4A00E7FD8C /* TrendingRepoListViewModel.swift in Sources */,
-				A11C672D279C567E0018E596 /* TrendingRepo.swift in Sources */,
 				A1ED877D2788AF72001254B1 /* TrendingRepoListViewController.swift in Sources */,
 				A1E135E127A28F28005A18F2 /* SearchCodeViewModel.swift in Sources */,
 				A10062D2278846DA00E9C697 /* ApplicationProtocol.swift in Sources */,

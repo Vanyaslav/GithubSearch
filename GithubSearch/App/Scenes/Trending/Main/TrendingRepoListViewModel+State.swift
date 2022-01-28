@@ -7,6 +7,12 @@
 
 import Foundation
 
+extension Array where Element == Repository {
+    var trendingResults: [TrendingRepoListViewModel.StandardItem] {
+        map(TrendingRepoListViewModel.StandardItem.init)
+    }
+}
+
 extension TrendingRepoListViewModel.State {
     enum Action {
         case startLoadingData(id: Void)
@@ -31,31 +37,30 @@ extension TrendingRepoListViewModel.State {
 
 extension TrendingRepoListViewModel {
     struct State {
-        private(set) var allItems: [SectionModel] = []
-        private(set) var canReload: Bool = true
-        private(set) var isLoading: Bool = false
-        private(set) var failureTitle: String?
+        var allItems: [SectionModel] = []
+        var canReload: Bool = true
+        var isLoading: Bool = false
+        var failure: GithubService.Error?
 
         func apply(_ action: Action) -> Self {
             var state = self
             switch action {
             case .startLoadingData:
                 state.isLoading = true
-                state.failureTitle = nil
+                state.failure = nil
             case .finishLoadingData:
                 state.isLoading = false
             case .process(.success(let response)):
                 let newItems = [SectionModel(model: .standard,
-                                             items: (response
-                                                        .items?
-                                                        .compactMap { StandardItem(with: $0) })!)]
+                                             items: (response.items?
+                                                        .trendingResults) ?? []) ]
                 state.allItems += newItems
-                state.canReload = response.incomplete_results
-                state.failureTitle = response.incomplete_results
-                    ? nil
-                    : "There is no more records with givin criteria."
+                state.canReload = !newItems.isEmpty
+                state.failure = newItems.isEmpty
+                    ? .allData
+                    : nil
             case .process(.failure(let error)):
-                state.failureTitle = error.errorDescription
+                state.failure = error
             }
             return state
         }

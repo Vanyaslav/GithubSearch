@@ -86,7 +86,7 @@ class SearchRepoViewModel {
                           dependency.service.searchRepositories(with: resource.search,
                                                                 page: resource.page,
                                                                 perPage: requestInputs.resultsPerPage)
-                              .asSignal(onErrorJustReturn: .failure(.other))
+                              .asSignal(onErrorJustReturn: .failure(.generic))
                               .map(Event.response)
                       }))
             .drive()

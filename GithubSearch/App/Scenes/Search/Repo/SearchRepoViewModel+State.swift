@@ -16,7 +16,7 @@ extension Array where Element == Repository {
 }
 
 extension SearchRepoViewModel {
-    struct StateData: Equatable {
+    struct StateApiData: Equatable {
         let search: String
         let page: UInt
     }
@@ -39,7 +39,7 @@ extension SearchRepoViewModel {
         var recentPage: UInt
         var canReload: Bool
         
-        var data: StateData? {
+        var data: StateApiData? {
             shouldLoadNextPage
                 ? .init(search: search, page: recentPage)
                 : nil

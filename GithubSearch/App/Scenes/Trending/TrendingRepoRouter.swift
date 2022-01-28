@@ -8,22 +8,27 @@
 import UIKit
 import RxSwift
 
+class TrendingRepoContext: AlertContext {
+    let showDetail = PublishSubject<TrendingRepoListViewModel.StandardItem>()
+    let disposeFlow = PublishSubject<Void>()
+}
+
 class TrendingRepoRouter: Router {
     private let disposeBag = CompositeDisposable()
-    private let context: TrendingRepo.Context
+    private let context: TrendingRepoContext
     private let dependency: AppDefaults.Dependency
 
     let navigationController: UINavigationController
 
     init(with navigationController: UINavigationController,
-         context: TrendingRepo.Context = TrendingRepo.Context(),
+         context: TrendingRepoContext = TrendingRepoContext(),
          dependency: AppDefaults.Dependency) {
         self.navigationController = navigationController
         self.context = context
         self.dependency = dependency
     }
 
-    func run(with style: AppStyle) {
+    func run(with style: AppType) {
         let view = TrendingRepoListViewController(with: TrendingRepoListViewModel(with: context,
                                                                                   dependency: dependency))
         switch style {
@@ -34,7 +39,7 @@ class TrendingRepoRouter: Router {
             navigationController
                 .pushViewController(view, animated: true)
         default:
-            break
+            return
         }
 
         context.showDetail

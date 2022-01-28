@@ -7,52 +7,26 @@
 
 import Foundation
 import UIKit
-import RxSwift
-
-enum MenuItem: Int, CaseIterable {
-    case trending, search
-    
-    var icon: UIImage {
-        return UIImage()
-    }
-    
-    var title: String {
-        switch self {
-        case .trending:
-            return "Trending"
-        case .search:
-            return "Search"
-        }
-    }
-    
-    static var basicControllers: [UIViewController] {
-        Self.allCases
-            .map { item -> UINavigationController in
-                let navigation = UINavigationController()
-                navigation.tabBarItem.title = item.title
-                navigation.tabBarItem.image = item.icon
-                return navigation
-            }
-    }
-}
-
 
 class MenuViewController: UITabBarController {
     init(with dependency: AppDefaults.Dependency) {
         super.init(nibName: nil, bundle: nil)
-        viewControllers = MenuItem.basicControllers
+        viewControllers = AppType.FlowType.basicControllers
                 
         _ = viewControllers?.enumerated()
             .map { (offset, element) -> Router? in
-                guard let items = MenuItem(rawValue: offset),
-                      let nc = element as? UINavigationController
+                guard let nc = element as? UINavigationController
                 else { return nil }
                 
-                switch items {
+                switch AppType.FlowType(with: offset) {
                 case .trending:
                     return TrendingRepoRouter(with: nc, dependency: dependency)
-                case .search:
+                case .search(type: .repo):
                     return SearchRepoRouter(with: nc, dependency: dependency)
+                case .search(type: .code):
+                    return SearchCodeRouter(with: nc, dependency: dependency)
+                case .undefined:
+                    return nil
                 }
             }.compactMap { $0 }
             .map { $0.run(with: .tabBar) }
