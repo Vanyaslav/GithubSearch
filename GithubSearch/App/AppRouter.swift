@@ -137,7 +137,7 @@ class AppRouter: Router, ApplicationProtocol {
             .map { [self] in
                 switch style {
                 case .tabBar:
-                    $0.setViewControllers([MenuViewController(with: dependency)], animated: true)
+                    $0.setViewControllers([TabBarMenuViewController(with: dependency)], animated: true)
                 case .flow(type: .trending):
                     TrendingRepoRouter(with: $0, dependency: dependency).run(with: style)
                 case .flow(type: .search(type: .repo)):

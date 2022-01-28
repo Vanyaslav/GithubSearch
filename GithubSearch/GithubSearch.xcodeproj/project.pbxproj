@@ -26,13 +26,14 @@
 		A149622E27882E020017F68D /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = A149622D27882E020017F68D /* RxRelay */; };
 		A149623027882E020017F68D /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = A149622F27882E020017F68D /* RxSwift */; };
 		A15C1BAA279961DB0096B26A /* TrendingRepoRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15C1BA9279961DB0096B26A /* TrendingRepoRouter.swift */; };
-		A15C1BAD279965610096B26A /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15C1BAC279965610096B26A /* MenuViewController.swift */; };
+		A15C1BAD279965610096B26A /* TabBarMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15C1BAC279965610096B26A /* TabBarMenuViewController.swift */; };
 		A1697A4D278AD90700362134 /* GithubMockService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1697A4C278AD90700362134 /* GithubMockService.swift */; };
 		A1697A50278B12CB00362134 /* InitialViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1697A4F278B12CB00362134 /* InitialViewModel.swift */; };
 		A1697A5E278C485A00362134 /* ComparisonResult+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1697A5C278C46EA00362134 /* ComparisonResult+Ext.swift */; };
 		A1697A5F278C485D00362134 /* Date+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1697A5D278C46EA00362134 /* Date+Ext.swift */; };
 		A1697A61278C4A2500362134 /* UIColor+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1697A60278C4A2500362134 /* UIColor+Ext.swift */; };
 		A1927799279851DC00DE5275 /* TrendingRepoDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1927798279851DC00DE5275 /* TrendingRepoDetailViewController.swift */; };
+		A193B49727A3F63E00C3B5E0 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A193B49627A3F63E00C3B5E0 /* MenuViewController.swift */; };
 		A194F53D2789A2CD00E7FD8C /* UIView+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A194F53C2789A2CD00E7FD8C /* UIView+Animation.swift */; };
 		A194F5402789BD4A00E7FD8C /* TrendingRepoListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A194F53F2789BD4A00E7FD8C /* TrendingRepoListViewModel.swift */; };
 		A194F5422789D69E00E7FD8C /* RepositoryListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = A194F5412789D69E00E7FD8C /* RepositoryListResponse.swift */; };
@@ -87,13 +88,14 @@
 		A149621827882DA30017F68D /* InitialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialViewController.swift; sourceTree = "<group>"; };
 		A149621D27882DA80017F68D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A15C1BA9279961DB0096B26A /* TrendingRepoRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendingRepoRouter.swift; sourceTree = "<group>"; };
-		A15C1BAC279965610096B26A /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
+		A15C1BAC279965610096B26A /* TabBarMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarMenuViewController.swift; sourceTree = "<group>"; };
 		A1697A4C278AD90700362134 /* GithubMockService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GithubMockService.swift; sourceTree = "<group>"; };
 		A1697A4F278B12CB00362134 /* InitialViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialViewModel.swift; sourceTree = "<group>"; };
 		A1697A5C278C46EA00362134 /* ComparisonResult+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ComparisonResult+Ext.swift"; sourceTree = "<group>"; };
 		A1697A5D278C46EA00362134 /* Date+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Ext.swift"; sourceTree = "<group>"; };
 		A1697A60278C4A2500362134 /* UIColor+Ext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Ext.swift"; sourceTree = "<group>"; };
 		A1927798279851DC00DE5275 /* TrendingRepoDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendingRepoDetailViewController.swift; sourceTree = "<group>"; };
+		A193B49627A3F63E00C3B5E0 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		A194F53C2789A2CD00E7FD8C /* UIView+Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Animation.swift"; sourceTree = "<group>"; };
 		A194F53F2789BD4A00E7FD8C /* TrendingRepoListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendingRepoListViewModel.swift; sourceTree = "<group>"; };
 		A194F5412789D69E00E7FD8C /* RepositoryListResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryListResponse.swift; sourceTree = "<group>"; };
@@ -246,7 +248,8 @@
 		A15C1BAB279965480096B26A /* Menu */ = {
 			isa = PBXGroup;
 			children = (
-				A15C1BAC279965610096B26A /* MenuViewController.swift */,
+				A15C1BAC279965610096B26A /* TabBarMenuViewController.swift */,
+				A193B49627A3F63E00C3B5E0 /* MenuViewController.swift */,
 			);
 			path = Menu;
 			sourceTree = "<group>";
@@ -520,7 +523,7 @@
 				A149621527882DA30017F68D /* AppDelegate.swift in Sources */,
 				A1E135E327A28F46005A18F2 /* SearchCodeViewModel+State.swift in Sources */,
 				A1697A5E278C485A00362134 /* ComparisonResult+Ext.swift in Sources */,
-				A15C1BAD279965610096B26A /* MenuViewController.swift in Sources */,
+				A15C1BAD279965610096B26A /* TabBarMenuViewController.swift in Sources */,
 				A11C672B279C34C60018E596 /* SearchRepoRouter.swift in Sources */,
 				A11C6725279C008E0018E596 /* SearchRepoViewController.swift in Sources */,
 				A1DD931C279801A9002CBCB8 /* TrendingRepoListViewModel+State.swift in Sources */,
@@ -542,6 +545,7 @@
 				A1697A5F278C485D00362134 /* Date+Ext.swift in Sources */,
 				A10062D427884F7F00E9C697 /* Disposable+Ext.swift in Sources */,
 				A1927799279851DC00DE5275 /* TrendingRepoDetailViewController.swift in Sources */,
+				A193B49727A3F63E00C3B5E0 /* MenuViewController.swift in Sources */,
 				A194F54F278A0C3000E7FD8C /* Observable+Ext.swift in Sources */,
 				A10062D02788462300E9C697 /* InitialViewModel.swift in Sources */,
 				A1ED87762788AA62001254B1 /* UIDevice+Ext.swift in Sources */,

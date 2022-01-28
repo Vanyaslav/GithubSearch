@@ -13,12 +13,6 @@ import RxFeedback
 extension SearchCodeViewModel {
     // Input data for API request
     enum requestInputs {
-        // number of trending repositories taken by pagination in the table (TrendingRepoListViewController) / (max 100)
-        static let resultsPerPage: UInt = 100
-        // example: value 7 will set the start date a week before today
-        static let date: String = Date.calculateSpecificDate(with: 200)
-        //
-        static let dataOrder: ComparisonResult = .orderedDescending
         //
         static let defaultSearch = "org:apple"
         //
