@@ -75,16 +75,26 @@ class SearchCodeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.titleView = infoLabel
-
-        navigationController?.cleanBar()
-        view.backgroundColor = UIColor.background
+        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        // moving back in navigation
+        if isMovingFromParent {
+            viewModel.viewWillUnload.onNext(())
+        }
     }
 }
 
 extension SearchCodeViewController {
     override func loadView() {
         super.loadView()
+        
+        navigationItem.titleView = infoLabel
+
+        navigationController?.cleanBar()
+        view.backgroundColor = UIColor.background
 
         [searchTextBar, searchResultsTable]
             .forEach(view.addSubview)

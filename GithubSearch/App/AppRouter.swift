@@ -1,5 +1,5 @@
 //
-//  AppRouter.swift
+//  MainRouter.swift
 //  GithubSearch
 //
 //  Created by Tomas Baculák on 07/01/2022.
@@ -7,6 +7,37 @@
 
 import UIKit
 import RxSwift
+
+extension AppType {
+    func router(with nc: UINavigationController,
+                dependency: AppDefaults.Dependency) -> Router? {
+        switch self {
+        case .tabBar:
+            return TabBarRouter(with: nc, dependency: dependency)
+        case .menu:
+            return MenuRouter(with: nc, dependency: dependency)
+        case .flow(let type):
+            return type.router(with: nc, dependency: dependency)
+        }
+    }
+}
+
+extension AppType.FlowType {
+    func router(with nc: UINavigationController? = nil,
+                dependency: AppDefaults.Dependency,
+                splitController: UISplitViewController? = nil) -> Router? {
+        switch self {
+            case .search(.repo):
+                return SearchRepoRouter(with: nc, dependency: dependency, splitController: splitController)
+            case .search(type: .code):
+                return SearchCodeRouter(with: nc, dependency: dependency, splitController: splitController)
+            case .trending:
+                return TrendingRepoRouter(with: nc, dependency: dependency, splitController: splitController)
+            case .undefined:
+                return nil
+        }
+    }
+}
 
 enum AppType {
     case tabBar,
@@ -43,19 +74,23 @@ extension AppType.FlowType: Equatable {
         return UIImage()
     }
     
-    static var list: [Self] {
+    private static var list: [Self] {
         [
             .trending,
             .search(type: .repo),
             .search(type: .code)
         ]
     }
+    
+    static var titles: [String] {
+        list.map { $0.title } 
+    }
 
     static var basicControllers: [UIViewController] {
-        list.map { item -> UINavigationController in
+        list.map {
             let navigation = UINavigationController()
-                navigation.tabBarItem.title = item.title
-                navigation.tabBarItem.image = item.icon
+                navigation.tabBarItem.title = $0.title
+                navigation.tabBarItem.image = $0.icon
             return navigation
         }
     }
@@ -74,14 +109,17 @@ class AppContext {
 
 class AlertContext {
     let showMessage = PublishSubject<String>()
+    let disposeFlow = PublishSubject<Void>()
 }
 
 protocol Router {
     var navigationController: UINavigationController { get }
+    var disposeBag: CompositeDisposable { get }
     var recentController: UIViewController { get }
 
     func run(with style: AppType)
     func showAlert(with title: String, message: String)
+    func disposeFlow()
 }
 
 extension Router {
@@ -101,21 +139,29 @@ extension Router {
             return
         }
     }
+    
+    func disposeFlow() {
+        disposeBag.dispose()
+    }
 }
 
 class AppRouter: Router, ApplicationProtocol {
-    private let disposeBag = CompositeDisposable()
+    let disposeBag = CompositeDisposable()
     private let context: AppContext
     private let dependency: AppDefaults.Dependency
 
     let navigationController: UINavigationController
 
-    init(with navigationController: UINavigationController,
+    init(with window: UIWindow,
+         navigationController: UINavigationController = UINavigationController(),
          context: AppContext = AppContext(),
          dependency: AppDefaults.Dependency = AppDefaults.Dependency()) {
         self.navigationController = navigationController
         self.context = context
         self.dependency = dependency
+        
+        window.rootViewController = navigationController
+        window.makeKeyAndVisible()
     }
 
     func run(with style: AppType = AppDefaults.appType) {
@@ -130,22 +176,9 @@ class AppRouter: Router, ApplicationProtocol {
             .disposed(by: disposeBag)
 
         context.startApp
-            .map { [self] in navigationController }
-            .map { [self] nc -> Router? in
-                switch style {
-                case .tabBar:
-                    return TabBarRouter(with: nc, dependency: dependency)
-                case .flow(type: .trending):
-                    return TrendingRepoRouter(with: nc, dependency: dependency)
-                case .flow(type: .search(type: .repo)):
-                    return SearchRepoRouter(with: nc, dependency: dependency)
-                case .flow(type: .search(type: .code)):
-                    return SearchRepoRouter(with: nc, dependency: dependency)
-                case .flow(type: .undefined):
-                    return  nil
-                case .menu:
-                    return nil
-                }
+            .map { [self] in
+                style.router(with: navigationController,
+                             dependency: dependency)
             }.unwrap()
             .map { $0.run(with: style) }
             .subscribe()

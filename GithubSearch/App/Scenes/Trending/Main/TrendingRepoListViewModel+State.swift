@@ -7,6 +7,10 @@
 
 import Foundation
 
+extension TrendingRepoListViewModel.State {
+    static let numberOfRecordsToShowReload: Int = 7
+}
+
 extension Array where Element == Repository {
     var trendingResults: [TrendingRepoListViewModel.StandardItem] {
         map(TrendingRepoListViewModel.StandardItem.init)
@@ -29,10 +33,6 @@ extension TrendingRepoListViewModel.State {
     var numberOfRecords: UInt {
         UInt(allItems.map { $0.items.count }.reduce(0, +))
     }
-    
-    var isReloadVisible: Bool {
-        numberOfRecords < 7
-    }
 }
 
 extension TrendingRepoListViewModel {
@@ -40,6 +40,7 @@ extension TrendingRepoListViewModel {
         var allItems: [SectionModel] = []
         var canReload: Bool = true
         var isLoading: Bool = false
+        var isReloadVisible: Bool = false
         var failure: GithubService.Error?
 
         func apply(_ action: Action) -> Self {
@@ -59,6 +60,7 @@ extension TrendingRepoListViewModel {
                 state.failure = newItems.isEmpty
                     ? .allData
                     : nil
+                state.isReloadVisible = state.numberOfRecords < Self.numberOfRecordsToShowReload
             case .process(.failure(let error)):
                 state.failure = error
             }

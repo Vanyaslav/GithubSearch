@@ -63,6 +63,14 @@ class SearchRepoViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        // moving back in navigation
+        if isMovingFromParent {
+            viewModel.viewWillUnload.onNext(())
+        }
+    }
 }
 
 extension SearchRepoViewController {

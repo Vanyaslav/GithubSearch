@@ -68,6 +68,7 @@ class SearchCodeViewModel {
     // in
     let scrolledBottom = PublishSubject<Void>()
     let searchInputs = PublishSubject<String>()
+    let viewWillUnload = PublishSubject<Void>()
     // out
     let infoDescription = BehaviorRelay<String>(value: "")
     let loadItems = BehaviorRelay<[RepositoryData]> (value: [])
@@ -99,7 +100,7 @@ class SearchCodeViewModel {
                 state.map { $0.results }
                     .drive(me.loadItems),
                 state.map { $0.search }
-                    .map { RequestInputs.defaultRepoSearch
+                    .map { SearchType.noInput.requestInput
                         + " "
                         + RequestInputs.defaultUserSearch
                         + $0 }

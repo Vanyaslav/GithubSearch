@@ -83,13 +83,13 @@ class TrendingRepoListViewModel {
         
         let request = startLoading
             .withLatestFrom(currentPage)
-            .map { page in
-                (page,
-                 RequestInputs.resultsPerPage,
-                 RequestInputs.date,
-                 RequestInputs.numberOfStars,
-                 RequestInputs.dataOrder)
-            }
+            .map { page in (
+                page,
+                RequestInputs.resultsPerPage,
+                RequestInputs.date,
+                RequestInputs.numberOfStars,
+                RequestInputs.dataOrder
+            )}
             .flatMapLatest(dependency.service.loadTrendingRepositories)
             .materialize()
             .share()

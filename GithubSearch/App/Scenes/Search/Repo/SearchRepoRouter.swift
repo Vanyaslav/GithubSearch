@@ -1,5 +1,5 @@
 //
-//  SearchRepoRouter.swift
+//  SearchRepoAppRouter.swift
 //  GithubSearch
 //
 //  Created by Tomas Baculák on 22/01/2022.
@@ -11,18 +11,20 @@ import RxSwift
 class SearchRepoContext: SearchCodeContext {}
 
 class SearchRepoRouter: Router {
-    private let disposeBag = CompositeDisposable()
+    let disposeBag = CompositeDisposable()
     private let context: SearchRepoContext
     private let dependency: AppDefaults.Dependency
-
+    private var splitController: UISplitViewController?
     let navigationController: UINavigationController
 
-    init(with navigationController: UINavigationController,
+    init(with navigationController: UINavigationController? = nil,
          context: SearchRepoContext = SearchRepoContext(),
-         dependency: AppDefaults.Dependency) {
-        self.navigationController = navigationController
+         dependency: AppDefaults.Dependency,
+         splitController: UISplitViewController? = nil) {
+        self.navigationController = navigationController ?? UINavigationController()
         self.context = context
         self.dependency = dependency
+        self.splitController = splitController
     }
     
     func run(with style: AppType) {
@@ -32,6 +34,13 @@ class SearchRepoRouter: Router {
         case .tabBar:
             navigationController
                 .setViewControllers([view], animated: true)
+        case .menu:
+            guard let splitController = splitController
+            else { return }
+            navigationController
+                .setViewControllers([view], animated: true)
+            splitController
+                .showDetailViewController(navigationController, sender: nil)
         case .flow(type: .search(type: .repo)):
             navigationController
                 .pushViewController(view, animated: true)
@@ -44,5 +53,10 @@ class SearchRepoRouter: Router {
             .map(showAlert)
             .subscribe()
             .disposed(by: disposeBag)
+        
+        context.disposeFlow
+            .bind { [self] in
+                disposeBag.dispose()
+            }.disposed(by: disposeBag)
     }
 }

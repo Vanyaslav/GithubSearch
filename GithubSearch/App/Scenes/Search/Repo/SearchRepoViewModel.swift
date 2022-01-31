@@ -36,6 +36,7 @@ class SearchRepoViewModel {
     // in
     let scrolledBottom = PublishSubject<Void>()
     let searchInputs = PublishSubject<String>()
+    let viewWillUnload = PublishSubject<Void>()
     // out
     let loadItems = BehaviorRelay<[RepositoryData]> (value: [])
     
