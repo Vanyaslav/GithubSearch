@@ -58,7 +58,7 @@ extension GithubService: DataServices {
                     prefix: String) -> Observable<SearchCodeResponse> {
         var urlComponents = searchCodeUrlComponents
         urlComponents.queryItems!.append(URLQueryItem(name: QueryItems.query,
-                                                      value: String(prefix)))
+                                                      value: prefix))
         urlComponents.queryItems!.append(URLQueryItem(name: QueryItems.query,
                                                       value: text))
 

@@ -12,9 +12,9 @@ import RxFeedback
 
 extension SearchRepoViewModel {
     // Input data for API request
-    enum requestInputs {
+    enum RequestInputs {
         // number of trending repositories taken by pagination in the table (TrendingRepoListViewController) / (max 100)
-        static let resultsPerPage: UInt = 100
+        static let resultsPerPage: UInt = 15
     }
 }
 
@@ -61,7 +61,7 @@ class SearchRepoViewModel {
                 state.map { $0.lastError?.errorDescription }
                     .asObservable()
                     .unwrap()
-                    .bind(to: context.showError),
+                    .bind(to: context.showMessage),
                 state.map { $0.results }
                     .drive(me.loadItems)
             ]
@@ -85,7 +85,7 @@ class SearchRepoViewModel {
                       effects: { resource in
                           dependency.service.searchRepositories(with: resource.search,
                                                                 page: resource.page,
-                                                                perPage: requestInputs.resultsPerPage)
+                                                                perPage: RequestInputs.resultsPerPage)
                               .asSignal(onErrorJustReturn: .failure(.generic))
                               .map(Event.response)
                       }))

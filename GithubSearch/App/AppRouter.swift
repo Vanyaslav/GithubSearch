@@ -10,6 +10,7 @@ import RxSwift
 
 enum AppType {
     case tabBar,
+         menu,
          flow(type: FlowType)
          
     
@@ -24,7 +25,7 @@ enum AppType {
     }
 }
 
-extension AppType.FlowType {
+extension AppType.FlowType: Equatable {
     var title: String {
         switch self {
         case .trending:
@@ -41,32 +42,28 @@ extension AppType.FlowType {
     var icon: UIImage {
         return UIImage()
     }
-
-    static var basicControllers: [UIViewController] {
+    
+    static var list: [Self] {
         [
-            AppType.FlowType.trending,
+            .trending,
             .search(type: .repo),
             .search(type: .code)
         ]
-            .map { item -> UINavigationController in
-                let navigation = UINavigationController()
+    }
+
+    static var basicControllers: [UIViewController] {
+        list.map { item -> UINavigationController in
+            let navigation = UINavigationController()
                 navigation.tabBarItem.title = item.title
                 navigation.tabBarItem.image = item.icon
-                return navigation
-            }
+            return navigation
+        }
     }
 
     init(with value: Int) {
-        switch value {
-        case 0:
-            self = .trending
-        case 1:
-            self = .search(type: .repo)
-        case 2:
-            self = .search(type: .code)
-        default:
-            self = .undefined
-        }
+        self = Self.list.contains{ $0 == Self.list[value] }
+            ? Self.list[value]
+            : .undefined
     }
 }
 
@@ -76,7 +73,7 @@ class AppContext {
 }
 
 class AlertContext {
-    let showError = PublishSubject<String>()
+    let showMessage = PublishSubject<String>()
 }
 
 protocol Router {
@@ -121,7 +118,7 @@ class AppRouter: Router, ApplicationProtocol {
         self.dependency = dependency
     }
 
-    func run(with style: AppType = AppDefaults.AppType) {
+    func run(with style: AppType = AppDefaults.appType) {
         let model = InitialViewModel(with: context)
         let view = InitialViewController(with: model)
         navigationController
@@ -134,20 +131,23 @@ class AppRouter: Router, ApplicationProtocol {
 
         context.startApp
             .map { [self] in navigationController }
-            .map { [self] in
+            .map { [self] nc -> Router? in
                 switch style {
                 case .tabBar:
-                    $0.setViewControllers([TabBarMenuViewController(with: dependency)], animated: true)
+                    return TabBarRouter(with: nc, dependency: dependency)
                 case .flow(type: .trending):
-                    TrendingRepoRouter(with: $0, dependency: dependency).run(with: style)
+                    return TrendingRepoRouter(with: nc, dependency: dependency)
                 case .flow(type: .search(type: .repo)):
-                    SearchRepoRouter(with: $0, dependency: dependency).run(with: style)
+                    return SearchRepoRouter(with: nc, dependency: dependency)
                 case .flow(type: .search(type: .code)):
-                    SearchRepoRouter(with: $0, dependency: dependency).run(with: style)
+                    return SearchRepoRouter(with: nc, dependency: dependency)
                 case .flow(type: .undefined):
-                    break
+                    return  nil
+                case .menu:
+                    return nil
                 }
-            }
+            }.unwrap()
+            .map { $0.run(with: style) }
             .subscribe()
             .disposed(by: disposeBag)
     }

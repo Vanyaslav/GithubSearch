@@ -8,9 +8,10 @@
 import Foundation
 
 extension Array where Element == Repository {
-    var searchResults:  [SearchRepoViewModel.RepositoryData] {
+    var searchResults: [SearchRepoViewModel.RepositoryData] {
         map { SearchRepoViewModel
-            .RepositoryData(name: $0.name, url: URL(string: $0.url)!)
+            .RepositoryData(name: $0.name,
+                            url: URL(string: $0.url)!)
         }
     }
 }

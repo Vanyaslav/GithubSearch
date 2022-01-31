@@ -26,8 +26,8 @@ class SearchRepoRouter: Router {
     }
     
     func run(with style: AppType) {
-        let view = SearchRepoViewController(with: SearchRepoViewModel( with: dependency,
-                                                                       context: context))
+        let view = SearchRepoViewController(with: SearchRepoViewModel(with: dependency,
+                                                                      context: context))
         switch style {
         case .tabBar:
             navigationController
@@ -39,7 +39,7 @@ class SearchRepoRouter: Router {
             return
         }
         
-        context.showError
+        context.showMessage
             .map { ("", $0) }
             .map(showAlert)
             .subscribe()

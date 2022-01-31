@@ -50,6 +50,8 @@
 		A1E135DF27A28D7D005A18F2 /* SearchCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E135DE27A28D7D005A18F2 /* SearchCodeViewController.swift */; };
 		A1E135E127A28F28005A18F2 /* SearchCodeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E135E027A28F28005A18F2 /* SearchCodeViewModel.swift */; };
 		A1E135E327A28F46005A18F2 /* SearchCodeViewModel+State.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E135E227A28F46005A18F2 /* SearchCodeViewModel+State.swift */; };
+		A1E135E527A5D522005A18F2 /* Sequence+Unique.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E135E427A5D522005A18F2 /* Sequence+Unique.swift */; };
+		A1E135E727A5EABA005A18F2 /* MenuCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E135E627A5EABA005A18F2 /* MenuCoordinator.swift */; };
 		A1ED877327889B40001254B1 /* AppDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1ED877227889B40001254B1 /* AppDefaults.swift */; };
 		A1ED87762788AA62001254B1 /* UIDevice+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1ED87752788AA62001254B1 /* UIDevice+Ext.swift */; };
 		A1ED87782788AA85001254B1 /* UINavigationController+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1ED87772788AA85001254B1 /* UINavigationController+Ext.swift */; };
@@ -112,6 +114,8 @@
 		A1E135DE27A28D7D005A18F2 /* SearchCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCodeViewController.swift; sourceTree = "<group>"; };
 		A1E135E027A28F28005A18F2 /* SearchCodeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCodeViewModel.swift; sourceTree = "<group>"; };
 		A1E135E227A28F46005A18F2 /* SearchCodeViewModel+State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchCodeViewModel+State.swift"; sourceTree = "<group>"; };
+		A1E135E427A5D522005A18F2 /* Sequence+Unique.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sequence+Unique.swift"; sourceTree = "<group>"; };
+		A1E135E627A5EABA005A18F2 /* MenuCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCoordinator.swift; sourceTree = "<group>"; };
 		A1ED877227889B40001254B1 /* AppDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDefaults.swift; sourceTree = "<group>"; };
 		A1ED87752788AA62001254B1 /* UIDevice+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Ext.swift"; sourceTree = "<group>"; };
 		A1ED87772788AA85001254B1 /* UINavigationController+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+Ext.swift"; sourceTree = "<group>"; };
@@ -250,6 +254,7 @@
 			children = (
 				A15C1BAC279965610096B26A /* TabBarMenuViewController.swift */,
 				A193B49627A3F63E00C3B5E0 /* MenuViewController.swift */,
+				A1E135E627A5EABA005A18F2 /* MenuCoordinator.swift */,
 			);
 			path = Menu;
 			sourceTree = "<group>";
@@ -260,6 +265,7 @@
 				A1ED87892788BE41001254B1 /* NSMutableAttributedString+Ext.swift */,
 				A1697A5C278C46EA00362134 /* ComparisonResult+Ext.swift */,
 				A1697A5D278C46EA00362134 /* Date+Ext.swift */,
+				A1E135E427A5D522005A18F2 /* Sequence+Unique.swift */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -522,10 +528,12 @@
 				A194F53D2789A2CD00E7FD8C /* UIView+Animation.swift in Sources */,
 				A149621527882DA30017F68D /* AppDelegate.swift in Sources */,
 				A1E135E327A28F46005A18F2 /* SearchCodeViewModel+State.swift in Sources */,
+				A1E135E527A5D522005A18F2 /* Sequence+Unique.swift in Sources */,
 				A1697A5E278C485A00362134 /* ComparisonResult+Ext.swift in Sources */,
 				A15C1BAD279965610096B26A /* TabBarMenuViewController.swift in Sources */,
 				A11C672B279C34C60018E596 /* SearchRepoRouter.swift in Sources */,
 				A11C6725279C008E0018E596 /* SearchRepoViewController.swift in Sources */,
+				A1E135E727A5EABA005A18F2 /* MenuCoordinator.swift in Sources */,
 				A1DD931C279801A9002CBCB8 /* TrendingRepoListViewModel+State.swift in Sources */,
 				A1ED87882788B730001254B1 /* GithubService.swift in Sources */,
 				A194F5472789E49400E7FD8C /* DataServices.swift in Sources */,

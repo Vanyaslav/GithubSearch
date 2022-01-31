@@ -11,12 +11,40 @@ import RxSwift
 import RxFeedback
 
 extension SearchCodeViewModel {
-    // Input data for API request
-    enum requestInputs {
+    struct InputData {
+        let user: String
+        let repo: String
+    }
+}
+
+extension SearchCodeViewModel {
+    enum SearchType {
+        case noInput,
+             input(org: String, repo: String)
+        
+        var requestInput: String {
+            switch self {
+            case .noInput:
+                return RequestInputs.defaultRepoSearch
+                + RequestInputs.defaultSearch
+                
+            case .input(org: let org, repo: let repo):
+                return RequestInputs.defaultRepoSearch
+                + org
+                + "/"
+                + repo
+            }
+        }
+    }
+}
+
+extension SearchCodeViewModel {
+    //
+    enum RequestInputs {
         //
-        static let defaultSearch = "org:apple"
+        static let defaultSearch = "apple/swift"
         //
-        static let defaultRepoSearch = "repo:apple/swift"
+        static let defaultRepoSearch = "repo:"
         //
         static let defaultUserSearch = "user:"
     }
@@ -24,14 +52,14 @@ extension SearchCodeViewModel {
 
 extension SearchCodeViewModel.RepositoryData: CustomDebugStringConvertible {
     var debugDescription: String {
-        "\(name) | \(url)"
+        "\(name) | \(subTitle)"
     }
 }
 
 extension SearchCodeViewModel {
-    struct RepositoryData: Equatable {
+    struct RepositoryData: Equatable, Hashable {
         let name: String
-        let url: URL
+        let subTitle: String
     }
 }
 
@@ -45,7 +73,8 @@ class SearchCodeViewModel {
     let loadItems = BehaviorRelay<[RepositoryData]> (value: [])
     
     init(with dependency: AppDefaults.Dependency,
-         context: SearchCodeContext) {
+         context: SearchCodeContext,
+         inputData: InputData? = nil) {
         
         let scrolledBottom = scrolledBottom
     
@@ -66,11 +95,14 @@ class SearchCodeViewModel {
                 state.map { $0.lastError?.errorDescription }
                     .asObservable()
                     .unwrap()
-                    .bind(to: context.showError),
+                    .bind(to: context.showMessage),
                 state.map { $0.results }
                     .drive(me.loadItems),
                 state.map { $0.search }
-                    .map { requestInputs.defaultRepoSearch + " " + requestInputs.defaultUserSearch + $0 }
+                    .map { RequestInputs.defaultRepoSearch
+                        + " "
+                        + RequestInputs.defaultUserSearch
+                        + $0 }
                     .drive(me.infoDescription)
             ]
 
@@ -91,8 +123,15 @@ class SearchCodeViewModel {
                 bindUI,
                 react(request: { $0.data },
                       effects: { resource in
-                          dependency.service.searchCode(with: requestInputs.defaultUserSearch + resource.search,
-                                                        prefix: requestInputs.defaultRepoSearch)
+                          dependency.service.searchCode(with: RequestInputs.defaultUserSearch
+                                                        + resource.search,
+                                                        prefix: ((inputData != nil)
+                                                                 ? SearchType
+                                                                    .input(org: inputData!.user,
+                                                                           repo: inputData!.repo)
+                                                                 : SearchType.noInput)
+                                                            .requestInput
+                          )
                               .asSignal(onErrorJustReturn: .failure(.generic))
                               .map(Event.response)
                       }))

@@ -61,7 +61,8 @@ class TrendingRepoListViewController: UIViewController, UITableViewDelegate {
                        forCellReuseIdentifier: Self.standardCellId)
 
         let dataSource = RxTableViewSectionedReloadDataSource<TrendingRepoListViewModel.SectionModel>(configureCell: { _, tableView, indexPath, item in
-            let cell = tableView.dequeueReusableCell(withIdentifier: Self.standardCellId, for: indexPath) as? TrendingRepoListTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: Self.standardCellId,
+                                                     for: indexPath) as? TrendingRepoListTableViewCell
             cell?.set(with: item)
             return cell ?? UITableViewCell()
         })

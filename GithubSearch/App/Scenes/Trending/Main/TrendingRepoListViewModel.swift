@@ -13,7 +13,7 @@ import Differentiator
 
 extension TrendingRepoListViewModel {
     // Input data for API request
-    enum requestInputs {
+    enum RequestInputs {
         // example: value 7 will set the start date a week before today
         static let date: String = Date.calculateSpecificDate(with: 200)
         // number of trending repositories taken by pagination in the table (TrendingRepoListViewController) / (max 100)
@@ -85,10 +85,10 @@ class TrendingRepoListViewModel {
             .withLatestFrom(currentPage)
             .map { page in
                 (page,
-                 requestInputs.resultsPerPage,
-                 requestInputs.date,
-                 requestInputs.numberOfStars,
-                 requestInputs.dataOrder)
+                 RequestInputs.resultsPerPage,
+                 RequestInputs.date,
+                 RequestInputs.numberOfStars,
+                 RequestInputs.dataOrder)
             }
             .flatMapLatest(dependency.service.loadTrendingRepositories)
             .materialize()
@@ -156,7 +156,7 @@ class TrendingRepoListViewModel {
             .merge(request.errors().map { $0.localizedDescription },
                    failureMessage)
         errors
-            .bind(to: context.showError)
+            .bind(to: context.showMessage)
             .disposed(by: disposeBag)
         
         scrollToFit = errors.map { _ in }.asDriver()

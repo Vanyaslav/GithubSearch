@@ -8,9 +8,10 @@
 import Foundation
 
 extension Array where Element == SearchCode {
-    var searchCodeResults:  [SearchCodeViewModel.RepositoryData] {
+    var searchCodeResults: [SearchCodeViewModel.RepositoryData] {
         map { SearchCodeViewModel
-                .RepositoryData(name: $0.repository.name, url: URL(string: $0.url)!)
+                .RepositoryData(name: $0.name,
+                                subTitle: $0.path)
         }
     }
 }
@@ -41,7 +42,8 @@ extension SearchCodeViewModel {
         
         var data: StateApiData? {
             shouldLoadNextPage
-                ? .init(search: search, page: recentPage)
+                ? .init(search: search,
+                        page: recentPage)
                 : nil
         }
     }
@@ -68,7 +70,8 @@ extension SearchCodeViewModel.State {
 }
 
 extension SearchCodeViewModel.State {
-    private static func searchAction(state: Self, search: String) -> Self {
+    private static func searchAction(state: Self,
+                                     search: String) -> Self {
         return Self(search: search,
                     shouldLoadNextPage: !search.isEmpty,
                     results: [],
@@ -89,7 +92,8 @@ extension SearchCodeViewModel.State {
                     canReload: state.canReload)
         }
     
-    private static func manage(state: Self, data: SearchCodeListResponse) -> Self {
+    private static func manage(state: Self,
+                               data: SearchCodeListResponse) -> Self {
         let itemsToAdd = data.items?.searchCodeResults ?? []
         return Self(search: state.search,
                     shouldLoadNextPage: false,
@@ -101,7 +105,8 @@ extension SearchCodeViewModel.State {
                     canReload: !itemsToAdd.isEmpty)
     }
     
-    private static func manage(state: Self, failure: GithubService.Error) -> Self {
+    private static func manage(state: Self,
+                               failure: GithubService.Error) -> Self {
         return Self(search: state.search,
                     shouldLoadNextPage: false,
                     results: state.results,

@@ -39,7 +39,7 @@ class SearchCodeRouter: Router {
             return
         }
         
-        context.showError
+        context.showMessage
             .map { ("", $0) }
             .map(showAlert)
             .subscribe()

@@ -43,7 +43,7 @@ class SearchCodeViewController: UIViewController {
                                repository: SearchCodeViewModel.RepositoryData) -> UITableViewCell in
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "RepositoryCell")
             cell.textLabel?.text = repository.name
-            cell.detailTextLabel?.text = repository.url.description
+            cell.detailTextLabel?.text = repository.subTitle
             return cell
         }
 

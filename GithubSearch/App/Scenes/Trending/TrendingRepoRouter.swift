@@ -50,7 +50,7 @@ class TrendingRepoRouter: Router {
             .subscribe()
             .disposed(by: disposeBag)
 
-        context.showError
+        context.showMessage
             .map { ("", $0) }
             .map(showAlert)
             .subscribe()
