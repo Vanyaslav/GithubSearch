@@ -8,10 +8,10 @@ import Foundation
 import RxSwift
 // linx
 extension InitialViewModel {
-    struct Linx {
-        static let mainWebSite = "https://github.com"
-        static let docsSite = "https://docs.github.com/en"
-        static let infoSite = "https://github.com/about"
+    enum Linx: String {
+        case mainWebSite = "https://github.com"
+        case docsSite = "https://docs.github.com/en"
+        case infoSite = "https://github.com/about"
     }
 }
 // animation
@@ -29,25 +29,13 @@ extension UInt {
 class InitialViewModel {
     private let disposeBag = DisposeBag()
     // in
-    let navigateToMain = PublishSubject<Void>()
-    let navigateToInfo = PublishSubject<Void>()
-    let navigateToDocs = PublishSubject<Void>()
+    let navigateTo = PublishSubject<Linx>()
 
     let startApp = PublishSubject<Void>()
 
     init(with context: AppContext) {
-        navigateToMain
-            .map { Linx.mainWebSite }
-            .bind(to: context.showWebSite)
-            .disposed(by: disposeBag)
-
-        navigateToInfo
-            .map { Linx.infoSite }
-            .bind(to: context.showWebSite)
-            .disposed(by: disposeBag)
-
-        navigateToDocs
-            .map { Linx.docsSite }
+        navigateTo
+            .map { $0.rawValue }.debug()
             .bind(to: context.showWebSite)
             .disposed(by: disposeBag)
 

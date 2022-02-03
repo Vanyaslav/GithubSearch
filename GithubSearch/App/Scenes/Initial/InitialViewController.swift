@@ -18,7 +18,8 @@ class InitialViewController: UIViewController {
         button.setTitle("Go to Github", for: .normal)
         button.titleLabel?.font = .boldSystemFont(ofSize: 14)
         button.rx.tap
-            .bind(to: viewModel.navigateToMain)
+            .map { .mainWebSite }
+            .bind(to: viewModel.navigateTo)
             .disposed(by: disposeBag)
         return button
     }()
@@ -71,7 +72,8 @@ class InitialViewController: UIViewController {
         let button = UIButton()
         button.setAttributedTitle("Help".smallUnderline(), for: .normal)
         button.rx.tap
-            .bind(to: viewModel.navigateToInfo)
+            .map { .infoSite }
+            .bind(to: viewModel.navigateTo)
             .disposed(by: disposeBag)
         return button
     }()
@@ -88,7 +90,8 @@ class InitialViewController: UIViewController {
         let button = UIButton()
         button.setAttributedTitle("info".smallUnderline(), for: .normal)
         button.rx.tap
-            .bind(to: viewModel.navigateToDocs)
+            .map { .docsSite }
+            .bind(to: viewModel.navigateTo)
             .disposed(by: disposeBag)
         return button
     }()
