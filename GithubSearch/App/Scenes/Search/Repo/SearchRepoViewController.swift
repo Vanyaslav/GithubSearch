@@ -17,7 +17,7 @@ class SearchRepoViewController: UIViewController {
         let bar = UISearchBar()
         bar.translatesAutoresizingMaskIntoConstraints = false
         bar.rx.text
-            .throttle(RxTimeInterval.milliseconds(500),
+            .throttle(RxTimeInterval.seconds(3),
                       scheduler: MainScheduler.instance)
             .distinctUntilChanged()
             .unwrap()

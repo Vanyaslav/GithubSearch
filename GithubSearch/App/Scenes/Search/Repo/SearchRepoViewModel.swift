@@ -42,6 +42,10 @@ class SearchRepoViewModel {
     
     init(with dependency: AppDefaults.Dependency,
          context: SearchRepoContext) {
+
+        viewWillUnload
+            .bind(to: context.disposeFlow)
+            .disposed(by: disposeBag)
         
         let scrolledBottom = scrolledBottom
     

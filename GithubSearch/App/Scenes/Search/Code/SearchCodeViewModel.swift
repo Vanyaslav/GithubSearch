@@ -21,6 +21,14 @@ extension SearchCodeViewModel {
     enum SearchType {
         case noInput,
              input(org: String, repo: String)
+
+        init(with org: String? = nil, repo: String? = nil) {
+            if let org = org, let repo = repo {
+                self = .input(org: org, repo: repo)
+            } else {
+                self = .noInput
+            }
+        }
         
         var requestInput: String {
             switch self {
@@ -76,6 +84,10 @@ class SearchCodeViewModel {
     init(with dependency: AppDefaults.Dependency,
          context: SearchCodeContext,
          inputData: InputData? = nil) {
+
+        viewWillUnload
+            .bind(to: context.disposeFlow)
+            .disposed(by: disposeBag)
         
         let scrolledBottom = scrolledBottom
     
@@ -91,6 +103,9 @@ class SearchCodeViewModel {
             }
         }
 
+        let requestInputs = SearchType(with: inputData?.user,
+                                       repo: inputData?.repo).requestInput
+
         let bindUI: (Driver<State>) -> Signal<Event> = bind(self) { me, state in
             let subscriptions = [
                 state.map { $0.lastError?.errorDescription }
@@ -100,7 +115,7 @@ class SearchCodeViewModel {
                 state.map { $0.results }
                     .drive(me.loadItems),
                 state.map { $0.search }
-                    .map { SearchType.noInput.requestInput
+                    .map { requestInputs
                         + " "
                         + RequestInputs.defaultUserSearch
                         + $0 }
@@ -126,13 +141,7 @@ class SearchCodeViewModel {
                       effects: { resource in
                           dependency.service.searchCode(with: RequestInputs.defaultUserSearch
                                                         + resource.search,
-                                                        prefix: ((inputData != nil)
-                                                                 ? SearchType
-                                                                    .input(org: inputData!.user,
-                                                                           repo: inputData!.repo)
-                                                                 : SearchType.noInput)
-                                                            .requestInput
-                          )
+                                                        prefix: requestInputs)
                               .asSignal(onErrorJustReturn: .failure(.generic))
                               .map(Event.response)
                       }))

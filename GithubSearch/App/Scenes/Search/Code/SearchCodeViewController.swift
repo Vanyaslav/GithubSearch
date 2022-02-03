@@ -25,7 +25,7 @@ class SearchCodeViewController: UIViewController {
         let bar = UISearchBar()
         bar.translatesAutoresizingMaskIntoConstraints = false
         bar.rx.text
-            .throttle(RxTimeInterval.milliseconds(1000),
+            .throttle(RxTimeInterval.seconds(3),
                       scheduler: MainScheduler.instance)
             .distinctUntilChanged()
             .unwrap()
@@ -70,12 +70,6 @@ class SearchCodeViewController: UIViewController {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        
     }
     
     override func viewWillDisappear(_ animated: Bool) {

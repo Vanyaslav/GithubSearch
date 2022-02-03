@@ -161,7 +161,7 @@ class TrendingRepoListViewModel {
         
         scrollToFit = errors.map { _ in }.asDriver()
 
-        viewWillUnload.debug()
+        viewWillUnload
             .bind(to: context.disposeFlow)
             .disposed(by: disposeBag)
     }
