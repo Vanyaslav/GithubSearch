@@ -52,12 +52,13 @@ extension TrendingRepoListViewModel {
             case .finishLoadingData:
                 state.isLoading = false
             case .process(.success(let response)):
-                let newItems = [SectionModel(model: .standard,
-                                             items: (response.items?
-                                                        .trendingResults) ?? []) ]
+                let newItems = [ SectionModel
+                                    .initialize(with: response
+                                                    .items?.trendingResults) ]
+                let isEmptyResponse = newItems.isEmpty
                 state.allItems += newItems
-                state.canReload = !newItems.isEmpty
-                state.failure = newItems.isEmpty
+                state.canReload = !isEmptyResponse
+                state.failure = isEmptyResponse
                     ? .allData
                     : nil
                 state.isReloadVisible = state.numberOfRecords < Self.numberOfRecordsToShowReload

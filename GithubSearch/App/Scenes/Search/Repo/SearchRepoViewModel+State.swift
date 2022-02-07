@@ -10,8 +10,8 @@ import Foundation
 extension Array where Element == Repository {
     var searchResults: [SearchRepoViewModel.RepositoryData] {
         map { SearchRepoViewModel
-            .RepositoryData(name: $0.name,
-                            url: URL(string: $0.url)!)
+                .RepositoryData(name: $0.name,
+                                url: URL(string: $0.url)!)
         }
     }
 }
@@ -66,13 +66,16 @@ extension SearchRepoViewModel.State {
             result.shouldLoadNextPage = result.canReload
         case .response(.success(let response)):
             let itemsToAdd = response.items?.searchResults ?? []
+            let isEmptyResponse = itemsToAdd.isEmpty
             result.results += itemsToAdd
-            result.canReload = !itemsToAdd.isEmpty
+            result.canReload = !isEmptyResponse
             result.shouldLoadNextPage = false
-            result.lastError = itemsToAdd.isEmpty
+            result.lastError = isEmptyResponse
                 ? .allData
                 : nil
-            result.recentPage += 1
+            result.recentPage += isEmptyResponse
+                ? 0
+                : 1
         case .response(.failure(let error)):
             result.shouldLoadNextPage = false
             result.lastError = error

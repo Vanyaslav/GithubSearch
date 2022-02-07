@@ -14,22 +14,27 @@ class SearchCodeRouter: Router {
     let disposeBag = CompositeDisposable()
     private let context: SearchCodeContext
     private let dependency: AppDefaults.Dependency
-    private var splitController: UISplitViewController?
+    private let splitController: UISplitViewController?
     let navigationController: UINavigationController
+
+    let inputData: SearchCodeViewModel.InputData?
 
     init(with navigationController: UINavigationController? = nil,
          context: SearchCodeContext = SearchCodeContext(),
          dependency: AppDefaults.Dependency,
-         splitController: UISplitViewController? = nil) {
-        self.navigationController = navigationController  ?? UINavigationController()
+         splitController: UISplitViewController? = nil,
+         inputData: SearchCodeViewModel.InputData? = nil) {
+        self.navigationController = navigationController ?? UINavigationController()
         self.context = context
         self.dependency = dependency
         self.splitController = splitController
+        self.inputData = inputData
     }
     
     func run(with style: AppType) {
         let view = SearchCodeViewController(with: SearchCodeViewModel(with: dependency,
-                                                                      context: context))
+                                                                      context: context,
+                                                                      inputData: inputData))
         switch style {
         case .tabBar:
             navigationController

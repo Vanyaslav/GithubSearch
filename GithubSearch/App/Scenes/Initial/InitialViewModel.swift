@@ -35,7 +35,7 @@ class InitialViewModel {
 
     init(with context: AppContext) {
         navigateTo
-            .map { $0.rawValue }.debug()
+            .map { $0.rawValue }
             .bind(to: context.showWebSite)
             .disposed(by: disposeBag)
 

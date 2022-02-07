@@ -34,14 +34,24 @@ extension SearchRepoViewModel {
 class SearchRepoViewModel {
     private let disposeBag = DisposeBag()
     // in
+    let selectedItem = PublishSubject<RepositoryData>()
     let scrolledBottom = PublishSubject<Void>()
     let searchInputs = PublishSubject<String>()
     let viewWillUnload = PublishSubject<Void>()
     // out
-    let loadItems = BehaviorRelay<[RepositoryData]> (value: [])
+    let loadItems: Driver<[RepositoryData]>
+
+    private let data = BehaviorRelay<[RepositoryData]> (value: [])
     
     init(with dependency: AppDefaults.Dependency,
          context: SearchRepoContext) {
+
+        loadItems = data.asDriver()
+
+        selectedItem
+            .map { SearchCodeViewModel.InputData(user: "apple", repo: $0.name) }
+            .bind(to: context.showCodeSearch)
+            .disposed(by: disposeBag)
 
         viewWillUnload
             .bind(to: context.disposeFlow)
@@ -68,7 +78,7 @@ class SearchRepoViewModel {
                     .unwrap()
                     .bind(to: context.showMessage),
                 state.map { $0.results }
-                    .drive(me.loadItems)
+                    .drive(me.data)
             ]
 
             let events: [Signal<Event>] = [

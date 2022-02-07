@@ -79,11 +79,15 @@ class SearchCodeViewModel {
     let viewWillUnload = PublishSubject<Void>()
     // out
     let infoDescription = BehaviorRelay<String>(value: "")
-    let loadItems = BehaviorRelay<[RepositoryData]> (value: [])
+    let loadItems: Driver<[RepositoryData]>
+
+    private let data = BehaviorRelay<[RepositoryData]> (value: [])
     
     init(with dependency: AppDefaults.Dependency,
          context: SearchCodeContext,
          inputData: InputData? = nil) {
+
+        loadItems = data.asDriver()
 
         viewWillUnload
             .bind(to: context.disposeFlow)
@@ -113,7 +117,7 @@ class SearchCodeViewModel {
                     .unwrap()
                     .bind(to: context.showMessage),
                 state.map { $0.results }
-                    .drive(me.loadItems),
+                    .drive(me.data),
                 state.map { $0.search }
                     .map { requestInputs
                         + " "

@@ -8,7 +8,9 @@
 import UIKit
 import RxSwift
 
-class SearchRepoContext: SearchCodeContext {}
+class SearchRepoContext: SearchCodeContext {
+    let showCodeSearch = PublishSubject<SearchCodeViewModel.InputData>()
+}
 
 class SearchRepoRouter: Router {
     let disposeBag = CompositeDisposable()
@@ -47,6 +49,15 @@ class SearchRepoRouter: Router {
         default:
             return
         }
+
+        context.showCodeSearch
+            .map { [self] in
+                SearchCodeRouter(with: navigationController,
+                                 dependency: dependency,
+                                 inputData: $0)
+                .run(with: .flow(type: .search(type: .code))) }
+            .subscribe()
+            .disposed(by: disposeBag)
         
         context.showMessage
             .map { ("", $0) }

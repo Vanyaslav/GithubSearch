@@ -42,8 +42,8 @@ class MenuRouter: Router {
         context.selectedItem
             .map { [self] item in
                 AppType.FlowType(with: item)
-                .router(dependency: dependency,
-                        splitController: splitController) }
+                    .router(dependency: dependency,
+                            splitController: splitController) }
             .unwrap()
             .withPrevious()
             .map { (previousRouter, router) in

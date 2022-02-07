@@ -17,7 +17,7 @@ class SearchRepoViewController: UIViewController {
         let bar = UISearchBar()
         bar.translatesAutoresizingMaskIntoConstraints = false
         bar.rx.text
-            .throttle(RxTimeInterval.seconds(3),
+            .throttle(RxTimeInterval.seconds(2),
                       scheduler: MainScheduler.instance)
             .distinctUntilChanged()
             .unwrap()
@@ -40,8 +40,11 @@ class SearchRepoViewController: UIViewController {
         }
         
         viewModel.loadItems
-            .asDriver()
             .drive(table.rx.items)(configureCell)
+            .disposed(by: disposeBag)
+
+        table.rx.modelSelected(SearchRepoViewModel.RepositoryData.self)
+            .bind(to: viewModel.selectedItem)
             .disposed(by: disposeBag)
         
         table.rx.reachedBottom()

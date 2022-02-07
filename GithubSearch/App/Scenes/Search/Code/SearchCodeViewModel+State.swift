@@ -95,14 +95,17 @@ extension SearchCodeViewModel.State {
     private static func manage(state: Self,
                                data: SearchCodeListResponse) -> Self {
         let itemsToAdd = data.items?.searchCodeResults ?? []
+        let isEmptyResponse = itemsToAdd.isEmpty
         return Self(search: state.search,
                     shouldLoadNextPage: false,
                     results: (state.results + itemsToAdd),
-                    lastError: itemsToAdd.isEmpty
+                    lastError: isEmptyResponse
                         ? .allData
                         : nil,
-                    recentPage: state.recentPage + 1,
-                    canReload: !itemsToAdd.isEmpty)
+                    recentPage: isEmptyResponse
+                        ? state.recentPage
+                        : state.recentPage + 1,
+                    canReload: !isEmptyResponse)
     }
     
     private static func manage(state: Self,

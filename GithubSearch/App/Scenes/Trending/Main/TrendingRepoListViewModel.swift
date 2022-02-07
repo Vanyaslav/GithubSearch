@@ -45,6 +45,11 @@ extension TrendingRepoListViewModel {
         }
     }
 }
+// create sections with data
+extension TrendingRepoListViewModel.SectionModel {
+    static func initialize(with data: [SectionModel.Item]?) -> SectionModel
+        { SectionModel(model: .standard, items: data ?? []) }
+}
 
 extension TrendingRepoListViewModel {
     typealias SectionModel = Differentiator.SectionModel<SectionType, StandardItem>

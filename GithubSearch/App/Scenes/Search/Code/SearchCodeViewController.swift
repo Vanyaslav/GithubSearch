@@ -25,7 +25,7 @@ class SearchCodeViewController: UIViewController {
         let bar = UISearchBar()
         bar.translatesAutoresizingMaskIntoConstraints = false
         bar.rx.text
-            .throttle(RxTimeInterval.seconds(3),
+            .throttle(RxTimeInterval.seconds(2),
                       scheduler: MainScheduler.instance)
             .distinctUntilChanged()
             .unwrap()
@@ -48,7 +48,6 @@ class SearchCodeViewController: UIViewController {
         }
 
         viewModel.loadItems
-            .asDriver()
             .drive(table.rx.items)(configureCell)
             .disposed(by: disposeBag)
 
