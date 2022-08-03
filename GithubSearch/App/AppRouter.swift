@@ -39,10 +39,24 @@ extension AppType.FlowType {
     }
 }
 
-enum AppType {
+enum AppType: CaseIterable, Equatable {
+    static var allCases: [AppType] = [.tabBar, .menu, .flow(type: .undefined)]
+    
     case tabBar,
          menu,
          flow(type: FlowType)
+    
+    var title: String {
+        switch self {
+        case .tabBar:
+            return "Tab bar"
+        case .menu:
+            return "Menu"
+        case .flow(_):
+            return "Flow"
+        }
+    }
+    
          
     
     enum FlowType {
@@ -74,7 +88,7 @@ extension AppType.FlowType: Equatable {
         return UIImage()
     }
     
-    private static var list: [Self] {
+    static var list: [Self] {
         [
             .trending,
             .search(type: .repo),
@@ -104,7 +118,8 @@ extension AppType.FlowType: Equatable {
 
 class AppContext {
     let showWebSite = PublishSubject<String>()
-    let startApp = PublishSubject<Void>()
+    let startApp = PublishSubject<AppType>()
+    let shoOptionsAlert = PublishSubject<Void>()
 }
 
 class AlertContext {
@@ -145,6 +160,50 @@ extension Router {
     }
 }
 
+extension AppRouter {
+    func showFlowOptions(with context: AppContext) {
+        let alert = UIAlertController(title: "Choose Flow type",
+                                      message: nil,
+                                      preferredStyle: .actionSheet)
+        AppType.FlowType.list.forEach { item in
+            alert.addAction(UIAlertAction(title: item.title,
+                                          style: .default,
+                                          handler: { _ in
+                    context.startApp.onNext(AppType.flow(type: item))
+                }))
+        }
+        
+        alert.addAction(UIAlertAction(title: "Cancel",
+                                      style: .cancel))
+        navigationController
+            .present(alert, animated: true)
+    }
+    
+    func showOptions(with context: AppContext) {
+        let alert = UIAlertController(title: "Choose App type",
+                                      message: nil,
+                                      preferredStyle: .actionSheet)
+        AppType.allCases.forEach { item in
+            alert.addAction(UIAlertAction(title: item.title,
+                                          style: .default,
+                                          handler: { [self] _ in
+                    guard item == .flow(type: .undefined)
+                    else {
+                        context.startApp.onNext(item)
+                        return
+                    }
+                    showFlowOptions(with: context)
+                })
+            )
+        }
+        
+        alert.addAction(UIAlertAction(title: "Cancel",
+                                      style: .cancel))
+        navigationController
+            .present(alert, animated: true)
+    }
+}
+
 class AppRouter: Router, ApplicationProtocol {
     let disposeBag = CompositeDisposable()
     private let context: AppContext
@@ -174,13 +233,23 @@ class AppRouter: Router, ApplicationProtocol {
             .map(showWebLink)
             .subscribe()
             .disposed(by: disposeBag)
-
+        
+        context
+            .shoOptionsAlert
+            .map { [self] in showOptions(with: context) }
+            .subscribe()
+            .disposed(by: disposeBag)
+        
         context.startApp
-            .map { [self] in
-                style.router(with: navigationController,
-                             dependency: dependency)
-            }.unwrap()
-            .map { $0.run(with: style) ; self.disposeBag.dispose() }
+            .map { [self] style in
+                guard let router = style.router(with: navigationController,
+                                                dependency: dependency)
+                else { return }
+                router.run(with: style)
+                if style == .tabBar || style == .menu {
+                    disposeFlow()
+                }
+            }
             .subscribe()
             .disposed(by: disposeBag)
     }

@@ -66,8 +66,7 @@ class SearchRepoRouter: Router {
             .disposed(by: disposeBag)
         
         context.disposeFlow
-            .bind { [self] in
-                disposeBag.dispose()
-            }.disposed(by: disposeBag)
+            .bind { [self] in disposeFlow() }
+            .disposed(by: disposeBag)
     }
 }

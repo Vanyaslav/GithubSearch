@@ -42,7 +42,7 @@ class InitialViewModel {
         startApp
             .delay(DispatchTimeInterval.milliseconds(Int(Self.progressDelay)),
                    scheduler: MainScheduler.instance)
-            .bind(to: context.startApp)
+            .bind(to: context.shoOptionsAlert)
             .disposed(by: disposeBag)
     }
 }
