@@ -180,7 +180,7 @@ class AppRouter: Router, ApplicationProtocol {
                 style.router(with: navigationController,
                              dependency: dependency)
             }.unwrap()
-            .map { $0.run(with: style) }
+            .map { $0.run(with: style) ; self.disposeBag.dispose() }
             .subscribe()
             .disposed(by: disposeBag)
     }
