@@ -52,8 +52,8 @@ class TrendingRepoRouter: Router {
         }
 
         context.showDetail
-            .map(TrendingRepoDetailViewModel.init(with:))
-            .map(TrendingRepoDetailViewController.init(with:))
+            .map(TrendingRepoDetailViewModel.init)
+            .map(TrendingRepoDetailViewController.init)
             .map { ($0, true) }
             .map(navigationController.pushViewController)
             .subscribe()
