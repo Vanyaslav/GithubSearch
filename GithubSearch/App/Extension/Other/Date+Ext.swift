@@ -13,9 +13,11 @@ extension Date {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "YYYY-MM-dd"
 
-        guard let specificDate = NSCalendar.current.date(byAdding: Calendar.Component.day,
-                                                         value: -days,
-                                                         to: today)
+        guard let specificDate = NSCalendar
+            .current
+            .date(byAdding: Calendar.Component.day,
+                  value: -days,
+                  to: today)
         else { return dateFormatter.string(from: today) }
         return dateFormatter.string(from: specificDate)
     }

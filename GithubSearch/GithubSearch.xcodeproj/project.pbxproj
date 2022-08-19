@@ -44,6 +44,13 @@
 		A194F54F278A0C3000E7FD8C /* Observable+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A194F54E278A0C3000E7FD8C /* Observable+Ext.swift */; };
 		A194F552278AD17200E7FD8C /* GithubMockData.json in Resources */ = {isa = PBXBuildFile; fileRef = A194F551278AD17200E7FD8C /* GithubMockData.json */; };
 		A1DD931C279801A9002CBCB8 /* TrendingRepoListViewModel+State.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1DD931B279801A9002CBCB8 /* TrendingRepoListViewModel+State.swift */; };
+		A1DE399A28AF7F3300928426 /* AppType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1DE399928AF7F3300928426 /* AppType.swift */; };
+		A1DE399C28AF7FED00928426 /* AppType+Routes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1DE399B28AF7FED00928426 /* AppType+Routes.swift */; };
+		A1DE399E28AF805800928426 /* AppType.FlowType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1DE399D28AF805800928426 /* AppType.FlowType.swift */; };
+		A1DE39A028AF813500928426 /* AppType.FlowType+Routes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1DE399F28AF813500928426 /* AppType.FlowType+Routes.swift */; };
+		A1DE39A228AF833000928426 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1DE39A128AF833000928426 /* Router.swift */; };
+		A1DE39A428AF83BB00928426 /* UIAlertController+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1DE39A328AF83BB00928426 /* UIAlertController+Ext.swift */; };
+		A1DE39A628AF83E200928426 /* UIAlert+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1DE39A528AF83E200928426 /* UIAlert+Ext.swift */; };
 		A1E135D727A17B0F005A18F2 /* SearchRepoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E135D627A17B0F005A18F2 /* SearchRepoViewModel.swift */; };
 		A1E135D927A1E9F6005A18F2 /* SearchRepoViewModel+State.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E135D827A1E9F6005A18F2 /* SearchRepoViewModel+State.swift */; };
 		A1E135DD27A28CA2005A18F2 /* SearchCodeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E135DC27A28CA2005A18F2 /* SearchCodeRouter.swift */; };
@@ -110,6 +117,13 @@
 		A194F54E278A0C3000E7FD8C /* Observable+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Observable+Ext.swift"; sourceTree = "<group>"; };
 		A194F551278AD17200E7FD8C /* GithubMockData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GithubMockData.json; sourceTree = "<group>"; };
 		A1DD931B279801A9002CBCB8 /* TrendingRepoListViewModel+State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TrendingRepoListViewModel+State.swift"; sourceTree = "<group>"; };
+		A1DE399928AF7F3300928426 /* AppType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppType.swift; sourceTree = "<group>"; };
+		A1DE399B28AF7FED00928426 /* AppType+Routes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppType+Routes.swift"; sourceTree = "<group>"; };
+		A1DE399D28AF805800928426 /* AppType.FlowType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppType.FlowType.swift; sourceTree = "<group>"; };
+		A1DE399F28AF813500928426 /* AppType.FlowType+Routes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppType.FlowType+Routes.swift"; sourceTree = "<group>"; };
+		A1DE39A128AF833000928426 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
+		A1DE39A328AF83BB00928426 /* UIAlertController+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Ext.swift"; sourceTree = "<group>"; };
+		A1DE39A528AF83E200928426 /* UIAlert+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlert+Ext.swift"; sourceTree = "<group>"; };
 		A1E135D627A17B0F005A18F2 /* SearchRepoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRepoViewModel.swift; sourceTree = "<group>"; };
 		A1E135D827A1E9F6005A18F2 /* SearchRepoViewModel+State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchRepoViewModel+State.swift"; sourceTree = "<group>"; };
 		A1E135DC27A28CA2005A18F2 /* SearchCodeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCodeRouter.swift; sourceTree = "<group>"; };
@@ -233,15 +247,16 @@
 		A149621327882DA30017F68D /* App */ = {
 			isa = PBXGroup;
 			children = (
-				A1ED877227889B40001254B1 /* AppDefaults.swift */,
 				A149621427882DA30017F68D /* AppDelegate.swift */,
 				A10062EC27887FA900E9C697 /* AppRouter.swift */,
+				A1ED877227889B40001254B1 /* AppDefaults.swift */,
+				A1DE39AA28AF878D00928426 /* Enums */,
+				A10062D52788512500E9C697 /* Scenes */,
+				A1DE39A928AF876600928426 /* Protocols */,
 				A1ED87862788B711001254B1 /* Service */,
 				A1ED87742788AA49001254B1 /* Extension */,
-				A10062D52788512500E9C697 /* Scenes */,
 				A1227CBF278884E4005BC286 /* Support */,
 				A1496234278831460017F68D /* Resources */,
-				A10062D1278846DA00E9C697 /* ApplicationProtocol.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -319,6 +334,42 @@
 			path = Mocks;
 			sourceTree = "<group>";
 		};
+		A1DE39A728AF843400928426 /* AppType */ = {
+			isa = PBXGroup;
+			children = (
+				A1DE399928AF7F3300928426 /* AppType.swift */,
+				A1DE399B28AF7FED00928426 /* AppType+Routes.swift */,
+			);
+			path = AppType;
+			sourceTree = "<group>";
+		};
+		A1DE39A828AF846200928426 /* AppType.FlowType */ = {
+			isa = PBXGroup;
+			children = (
+				A1DE399D28AF805800928426 /* AppType.FlowType.swift */,
+				A1DE399F28AF813500928426 /* AppType.FlowType+Routes.swift */,
+			);
+			path = AppType.FlowType;
+			sourceTree = "<group>";
+		};
+		A1DE39A928AF876600928426 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				A1DE39A128AF833000928426 /* Router.swift */,
+				A10062D1278846DA00E9C697 /* ApplicationProtocol.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		A1DE39AA28AF878D00928426 /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				A1DE39A728AF843400928426 /* AppType */,
+				A1DE39A828AF846200928426 /* AppType.FlowType */,
+			);
+			path = Enums;
+			sourceTree = "<group>";
+		};
 		A1E135DA27A28C6B005A18F2 /* Repo */ = {
 			isa = PBXGroup;
 			children = (
@@ -369,6 +420,8 @@
 				A1ED87752788AA62001254B1 /* UIDevice+Ext.swift */,
 				A1ED87772788AA85001254B1 /* UINavigationController+Ext.swift */,
 				A104EF51279EA1E800D3831A /* UITableView+Ext .swift */,
+				A1DE39A328AF83BB00928426 /* UIAlertController+Ext.swift */,
+				A1DE39A528AF83E200928426 /* UIAlert+Ext.swift */,
 			);
 			path = UIKit;
 			sourceTree = "<group>";
@@ -536,25 +589,31 @@
 			files = (
 				A15C1BAA279961DB0096B26A /* TrendingRepoRouter.swift in Sources */,
 				A1ED877327889B40001254B1 /* AppDefaults.swift in Sources */,
+				A1DE399E28AF805800928426 /* AppType.FlowType.swift in Sources */,
 				A104EF52279EA1E800D3831A /* UITableView+Ext .swift in Sources */,
 				A149621927882DA30017F68D /* InitialViewController.swift in Sources */,
 				A1ED87782788AA85001254B1 /* UINavigationController+Ext.swift in Sources */,
+				A1DE399C28AF7FED00928426 /* AppType+Routes.swift in Sources */,
 				A194F53D2789A2CD00E7FD8C /* UIView+Animation.swift in Sources */,
 				A149621527882DA30017F68D /* AppDelegate.swift in Sources */,
 				A1E135E327A28F46005A18F2 /* SearchCodeViewModel+State.swift in Sources */,
 				A1E135E527A5D522005A18F2 /* Sequence+Unique.swift in Sources */,
 				A1697A5E278C485A00362134 /* ComparisonResult+Ext.swift in Sources */,
 				A15C1BAD279965610096B26A /* TabBarViewController.swift in Sources */,
+				A1DE399A28AF7F3300928426 /* AppType.swift in Sources */,
 				A11C672B279C34C60018E596 /* SearchRepoRouter.swift in Sources */,
 				A11C6725279C008E0018E596 /* SearchRepoViewController.swift in Sources */,
+				A1DE39A428AF83BB00928426 /* UIAlertController+Ext.swift in Sources */,
 				A1E135E727A5EABA005A18F2 /* MenuRouter.swift in Sources */,
 				A1FF951627A83C10006AB2B0 /* ObservableType+Ext.swift in Sources */,
 				A1DD931C279801A9002CBCB8 /* TrendingRepoListViewModel+State.swift in Sources */,
 				A1ED87882788B730001254B1 /* GithubService.swift in Sources */,
 				A194F5472789E49400E7FD8C /* DataServices.swift in Sources */,
 				A1E135D927A1E9F6005A18F2 /* SearchRepoViewModel+State.swift in Sources */,
+				A1DE39A228AF833000928426 /* Router.swift in Sources */,
 				A1FF951427A7B7EB006AB2B0 /* TabBarRouter.swift in Sources */,
 				A194F5442789E44F00E7FD8C /* GithubService+UseCases.swift in Sources */,
+				A1DE39A628AF83E200928426 /* UIAlert+Ext.swift in Sources */,
 				A194F54B2789F01A00E7FD8C /* TrendingRepoListTableViewCell.swift in Sources */,
 				A10062ED27887FA900E9C697 /* AppRouter.swift in Sources */,
 				A1E135D727A17B0F005A18F2 /* SearchRepoViewModel.swift in Sources */,
@@ -571,6 +630,7 @@
 				A1927799279851DC00DE5275 /* TrendingRepoDetailViewController.swift in Sources */,
 				A193B49727A3F63E00C3B5E0 /* MenuViewController.swift in Sources */,
 				A194F54F278A0C3000E7FD8C /* Observable+Ext.swift in Sources */,
+				A1DE39A028AF813500928426 /* AppType.FlowType+Routes.swift in Sources */,
 				A10062D02788462300E9C697 /* InitialViewModel.swift in Sources */,
 				A1ED87762788AA62001254B1 /* UIDevice+Ext.swift in Sources */,
 				A1E135DF27A28D7D005A18F2 /* SearchCodeViewController.swift in Sources */,

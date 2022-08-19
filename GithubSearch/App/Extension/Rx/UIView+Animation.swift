@@ -10,7 +10,7 @@ import RxSwift
 
 extension Reactive where Base == UIButton {
     func whirlpoolAnimation(with duration: TimeInterval) -> Observable<Void> {
-            return Observable.create { (observer) -> Disposable in
+            Observable.create { (observer) -> Disposable in
                 UIView.animate(withDuration: duration, animations: {
                     self.base.transform = self.base.transform.scaledBy(x: 0.01, y: 0.01)
                     self.base.transform = self.base.transform.rotated(by: .pi)
