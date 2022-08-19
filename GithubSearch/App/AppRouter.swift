@@ -84,8 +84,20 @@ extension AppType.FlowType: Equatable {
         }
     }
 
-    var icon: UIImage {
-        return UIImage()
+    var icon: UIImage? {
+        switch self {
+        case .trending:
+            return UIImage(systemName: "chart.line.uptrend.xyaxis")
+        case .search(type: let type):
+            switch type {
+            case .code:
+                return UIImage(systemName: "doc.text.magnifyingglass")
+            case .repo:
+                return UIImage(systemName: "magnifyingglass.circle.fill")
+            }
+        case .undefined:
+            return UIImage(systemName: "questionmark.app.fill")
+        }
     }
     
     static var list: [Self] {
@@ -110,7 +122,7 @@ extension AppType.FlowType: Equatable {
     }
 
     init(with value: Int) {
-        self = Self.list.contains{ $0 == Self.list[value] }
+        self = Self.list.contains { $0 == Self.list[value] }
             ? Self.list[value]
             : .undefined
     }
@@ -160,45 +172,68 @@ extension Router {
     }
 }
 
+extension AppType.FlowType {
+    fileprivate func processFlow(context: AppContext) -> UIAlertAction {
+        UIAlertAction(title: title,
+                      style: .default,
+                      handler: { _ in
+            context
+                .startApp
+                .onNext(AppType.flow(type: self))
+            })
+    }
+}
+
+extension AppType {
+    fileprivate func processFlow(
+        context: AppContext,
+        router:  AppRouter
+    ) -> UIAlertAction {
+        UIAlertAction(title: title,
+                      style: .default,
+                      handler: { _ in
+            guard self == .flow(type: .undefined) else {
+                context.startApp.onNext(self)
+                return
+            }
+            router.showFlowOptions()
+        })
+    }
+}
+
+extension UIAlertController {
+    static func loadActionSheet(_ title: String) -> UIAlertController {
+        UIAlertController(title: title,
+                          message: nil,
+                          preferredStyle: .actionSheet)
+    }
+}
+
+extension UIAlertAction {
+    static func cancelAction() -> UIAlertAction {
+        UIAlertAction(title: "Cancel", style: .cancel)
+    }
+}
+
 extension AppRouter {
-    func showFlowOptions(with context: AppContext) {
-        let alert = UIAlertController(title: "Choose Flow type",
-                                      message: nil,
-                                      preferredStyle: .actionSheet)
+    func showFlowOptions() {
+        let alert = UIAlertController.loadActionSheet("Choose Flow type")
         AppType.FlowType.list.forEach { item in
-            alert.addAction(UIAlertAction(title: item.title,
-                                          style: .default,
-                                          handler: { _ in
-                    context.startApp.onNext(AppType.flow(type: item))
-                }))
+            alert.addAction(item.processFlow(context: context))
         }
         
-        alert.addAction(UIAlertAction(title: "Cancel",
-                                      style: .cancel))
+        alert.addAction(UIAlertAction.cancelAction())
         navigationController
             .present(alert, animated: true)
     }
     
-    func showOptions(with context: AppContext) {
-        let alert = UIAlertController(title: "Choose App type",
-                                      message: nil,
-                                      preferredStyle: .actionSheet)
+    func showOptions() {
+        let alert = UIAlertController.loadActionSheet("Choose App type")
         AppType.allCases.forEach { item in
-            alert.addAction(UIAlertAction(title: item.title,
-                                          style: .default,
-                                          handler: { [self] _ in
-                    guard item == .flow(type: .undefined)
-                    else {
-                        context.startApp.onNext(item)
-                        return
-                    }
-                    showFlowOptions(with: context)
-                })
-            )
+            alert.addAction(item.processFlow(context: context, router: self))
         }
         
-        alert.addAction(UIAlertAction(title: "Cancel",
-                                      style: .cancel))
+        alert.addAction(UIAlertAction.cancelAction())
         navigationController
             .present(alert, animated: true)
     }
@@ -211,10 +246,12 @@ class AppRouter: Router, ApplicationProtocol {
 
     let navigationController: UINavigationController
 
-    init(with window: UIWindow,
+    init(with
+         window: UIWindow,
          navigationController: UINavigationController = UINavigationController(),
          context: AppContext = AppContext(),
-         dependency: AppDefaults.Dependency = AppDefaults.Dependency()) {
+         dependency: AppDefaults.Dependency = AppDefaults.Dependency()
+    ) {
         self.navigationController = navigationController
         self.context = context
         self.dependency = dependency
@@ -223,7 +260,7 @@ class AppRouter: Router, ApplicationProtocol {
         window.makeKeyAndVisible()
     }
 
-    func run(with style: AppType = AppDefaults.appType) {
+    func run(with style: AppType = .tabBar) {
         let model = InitialViewModel(with: context)
         let view = InitialViewController(with: model)
         navigationController
@@ -236,7 +273,7 @@ class AppRouter: Router, ApplicationProtocol {
         
         context
             .shoOptionsAlert
-            .map { [self] in showOptions(with: context) }
+            .map { [self] in showOptions() }
             .subscribe()
             .disposed(by: disposeBag)
         
