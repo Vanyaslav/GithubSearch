@@ -21,7 +21,7 @@ class GenericContext {
 
 extension AppRouter {
     func showFlowOptions() {
-        let alert = UIAlertController.loadActionSheet("Choose Flow type")
+        let alert = UIAlertController.loadActionAlert("Choose Flow type")
         AppType.FlowType.list.forEach { item in
             alert.addAction(item.processFlow(context: context))
         }
@@ -31,7 +31,7 @@ extension AppRouter {
     }
     
     func showOptions() {
-        let alert = UIAlertController.loadActionSheet("Choose App type")
+        let alert = UIAlertController.loadActionAlert("Choose App type")
         AppType.allCases.forEach { item in
             alert.addAction(item.processFlow(context: context, router: self))
         }
