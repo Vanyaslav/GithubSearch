@@ -9,10 +9,7 @@ import Foundation
 
 extension Array where Element == SearchCode {
     var searchCodeResults: [SearchCodeViewModel.RepositoryData] {
-        map { SearchCodeViewModel
-                .RepositoryData(name: $0.name,
-                                subTitle: $0.path)
-        }
+        map { .init(name: $0.name, subTitle: $0.path) }
     }
 }
 

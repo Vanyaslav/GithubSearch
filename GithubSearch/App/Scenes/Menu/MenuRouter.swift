@@ -19,19 +19,19 @@ extension UISplitViewController {
 class MenuRouter: Router {
     let disposeBag = CompositeDisposable()
     private let dependency: AppDefaults.Dependency
-    private var splitController: UISplitViewController?
+    private let splitController: UISplitViewController
     let navigationController: UINavigationController
     
     private let context: MenuContext
     
     init(with nc: UINavigationController,
-         context: MenuContext = MenuContext(),
+         context: MenuContext = .init(),
          dependency: AppDefaults.Dependency) {
         self.navigationController = nc
         self.context = context
         self.dependency = dependency
         
-        let view = MenuViewController(with: MenuViewModel(with: context))
+        let view = MenuViewController(with: .init(with: context))
         let rootView = UINavigationController(rootViewController: view)
         let mainController = UISplitViewController(rootViewController: rootView)
         splitController = mainController

@@ -20,11 +20,11 @@ class SearchCodeRouter: Router {
     let inputData: SearchCodeViewModel.InputData?
 
     init(with navigationController: UINavigationController? = nil,
-         context: SearchCodeContext = SearchCodeContext(),
+         context: SearchCodeContext = .init(),
          dependency: AppDefaults.Dependency,
          splitController: UISplitViewController? = nil,
          inputData: SearchCodeViewModel.InputData? = nil) {
-        self.navigationController = navigationController ?? UINavigationController()
+        self.navigationController = navigationController ?? .init()
         self.context = context
         self.dependency = dependency
         self.splitController = splitController
@@ -32,9 +32,9 @@ class SearchCodeRouter: Router {
     }
     
     func run(with style: AppType) {
-        let view = SearchCodeViewController(with: SearchCodeViewModel(with: dependency,
-                                                                      context: context,
-                                                                      inputData: inputData))
+        let view = SearchCodeViewController(with: .init(with: dependency,
+                                                        context: context,
+                                                        inputData: inputData))
         switch style {
         case .tabBar:
             navigationController

@@ -16,7 +16,7 @@ class SearchRepoRouter: Router {
     let disposeBag = CompositeDisposable()
     private let context: SearchRepoContext
     private let dependency: AppDefaults.Dependency
-    private var splitController: UISplitViewController?
+    private let splitController: UISplitViewController?
     let navigationController: UINavigationController
 
     init(with navigationController: UINavigationController? = nil,
@@ -30,8 +30,8 @@ class SearchRepoRouter: Router {
     }
     
     func run(with style: AppType) {
-        let view = SearchRepoViewController(with: SearchRepoViewModel(with: dependency,
-                                                                      context: context))
+        let view = SearchRepoViewController(with: .init(with: dependency,
+                                                        context: context))
         switch style {
         case .tabBar:
             navigationController

@@ -16,7 +16,7 @@ class TrendingRepoRouter: Router {
     let disposeBag = CompositeDisposable()
     private let context: TrendingRepoContext
     private let dependency: AppDefaults.Dependency
-    private var splitController: UISplitViewController?
+    private let splitController: UISplitViewController?
 
     let navigationController: UINavigationController
 
@@ -31,8 +31,8 @@ class TrendingRepoRouter: Router {
     }
 
     func run(with style: AppType) {
-        let view = TrendingRepoListViewController(with: TrendingRepoListViewModel(with: context,
-                                                                                  dependency: dependency))
+        let view = TrendingRepoListViewController(with: .init(with: context,
+                                                              dependency: dependency))
         switch style {
         case .tabBar:
             navigationController

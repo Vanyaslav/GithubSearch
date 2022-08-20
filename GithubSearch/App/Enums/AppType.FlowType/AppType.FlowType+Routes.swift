@@ -23,3 +23,13 @@ extension AppType.FlowType {
         }
     }
 }
+
+extension AppType.FlowType {
+    func processFlow(context: AppContext) -> UIAlertAction {
+        .init(title: title, style: .default, handler: { _ in
+            context
+                .startApp
+                .onNext(AppType.flow(type: self))
+            })
+    }
+}

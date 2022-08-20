@@ -47,13 +47,9 @@ extension SearchCodeViewModel {
 }
 
 extension SearchCodeViewModel {
-    //
     enum RequestInputs {
-        //
         static let defaultSearch = "apple/swift"
-        //
         static let defaultRepoSearch = "repo:"
-        //
         static let defaultUserSearch = "user:"
     }
 }

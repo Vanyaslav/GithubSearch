@@ -19,35 +19,6 @@ class AlertContext {
     let disposeFlow = PublishSubject<Void>()
 }
 
-extension AppType.FlowType {
-    fileprivate func processFlow(context: AppContext) -> UIAlertAction {
-        UIAlertAction(title: title,
-                      style: .default,
-                      handler: { _ in
-            context
-                .startApp
-                .onNext(AppType.flow(type: self))
-            })
-    }
-}
-
-extension AppType {
-    fileprivate func processFlow(
-        context: AppContext,
-        router:  AppRouter
-    ) -> UIAlertAction {
-        UIAlertAction(title: title,
-                      style: .default,
-                      handler: { _ in
-            guard self == .flow(type: .undefined) else {
-                context.startApp.onNext(self)
-                return
-            }
-            router.showFlowOptions()
-        })
-    }
-}
-
 extension AppRouter {
     func showFlowOptions() {
         let alert = UIAlertController.loadActionSheet("Choose Flow type")
@@ -79,9 +50,9 @@ class AppRouter: Router, ApplicationProtocol {
 
     init(with
          window: UIWindow,
-         navigationController: UINavigationController = UINavigationController(),
-         context: AppContext = AppContext(),
-         dependency: AppDefaults.Dependency = AppDefaults.Dependency()
+         navigationController: UINavigationController = .init(),
+         context: AppContext = .init(),
+         dependency: AppDefaults.Dependency = .init()
     ) {
         self.navigationController = navigationController
         self.context = context
@@ -102,8 +73,7 @@ class AppRouter: Router, ApplicationProtocol {
             .subscribe()
             .disposed(by: disposeBag)
         
-        context
-            .shoOptionsAlert
+        context.shoOptionsAlert
             .map { [self] in showOptions() }
             .subscribe()
             .disposed(by: disposeBag)

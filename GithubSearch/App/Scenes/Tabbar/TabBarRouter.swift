@@ -24,7 +24,7 @@ class TabBarRouter: Router  {
         switch style {
         case .tabBar:
             let view = TabBarViewController()
-            _ = view.viewControllers?.enumerated()
+            view.viewControllers?.enumerated()
                 .map { (offset, element) -> Router? in
                     guard let nc = element as? UINavigationController
                     else { return nil }
@@ -32,7 +32,7 @@ class TabBarRouter: Router  {
                         .router(with: nc,
                                 dependency: dependency)
                 }.compactMap { $0 }
-                .map { $0.run(with: style) }
+                .forEach { $0.run(with: style) }
             
             navigationController
                 .setViewControllers([view], animated: true)

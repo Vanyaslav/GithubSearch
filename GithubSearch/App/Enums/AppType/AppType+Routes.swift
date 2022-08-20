@@ -21,3 +21,15 @@ extension AppType {
         }
     }
 }
+
+extension AppType {
+    func processFlow(context: AppContext, router:  AppRouter) -> UIAlertAction {
+        .init(title: title, style: .default, handler: { _ in
+            guard self == .flow(type: .undefined) else {
+                context.startApp.onNext(self)
+                return
+            }
+            router.showFlowOptions()
+        })
+    }
+}
