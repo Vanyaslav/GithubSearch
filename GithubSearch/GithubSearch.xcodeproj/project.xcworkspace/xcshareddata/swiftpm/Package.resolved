@@ -1,43 +1,41 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "RxDataSources",
-        "repositoryURL": "https://github.com/RxSwiftCommunity/RxDataSources",
-        "state": {
-          "branch": null,
-          "revision": "90c29b48b628479097fe775ed1966d75ac374518",
-          "version": "5.0.2"
-        }
-      },
-      {
-        "package": "RxFeedback",
-        "repositoryURL": "https://github.com/NoTests/RxFeedback.swift",
-        "state": {
-          "branch": null,
-          "revision": "aa8384081a14af8fb389245fce2eba5776a96d0b",
-          "version": "4.0.0"
-        }
-      },
-      {
-        "package": "RxSwift",
-        "repositoryURL": "https://github.com/ReactiveX/RxSwift",
-        "state": {
-          "branch": null,
-          "revision": "7c17a6ccca06b5c107cfa4284e634562ddaf5951",
-          "version": "6.2.0"
-        }
-      },
-      {
-        "package": "RxSwiftExt",
-        "repositoryURL": "https://github.com/RxSwiftCommunity/RxSwiftExt",
-        "state": {
-          "branch": null,
-          "revision": "a42af9caeab63f2dbde318f1f3dc424f05871a37",
-          "version": "6.1.0"
-        }
+  "pins" : [
+    {
+      "identity" : "rxdatasources",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/RxSwiftCommunity/RxDataSources",
+      "state" : {
+        "revision" : "90c29b48b628479097fe775ed1966d75ac374518",
+        "version" : "5.0.2"
       }
-    ]
-  },
-  "version": 1
+    },
+    {
+      "identity" : "rxfeedback.swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/NoTests/RxFeedback.swift",
+      "state" : {
+        "revision" : "aa8384081a14af8fb389245fce2eba5776a96d0b",
+        "version" : "4.0.0"
+      }
+    },
+    {
+      "identity" : "rxswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ReactiveX/RxSwift",
+      "state" : {
+        "revision" : "b4307ba0b6425c0ba4178e138799946c3da594f8",
+        "version" : "6.5.0"
+      }
+    },
+    {
+      "identity" : "rxswiftext",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/RxSwiftCommunity/RxSwiftExt",
+      "state" : {
+        "revision" : "a42af9caeab63f2dbde318f1f3dc424f05871a37",
+        "version" : "6.1.0"
+      }
+    }
+  ],
+  "version" : 2
 }
