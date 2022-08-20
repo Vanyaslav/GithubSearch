@@ -11,7 +11,7 @@ import RxSwift
 class AppContext {
     let showWebSite = PublishSubject<String>()
     let startApp = PublishSubject<AppType>()
-    let shoOptionsAlert = PublishSubject<Void>()
+    let showOptionsAlert = PublishSubject<Void>()
 }
 
 class GenericContext {
@@ -73,7 +73,7 @@ class AppRouter: Router, ApplicationProtocol {
             .subscribe()
             .disposed(by: disposeBag)
         
-        context.shoOptionsAlert
+        context.showOptionsAlert
             .map { [self] in showOptions() }
             .subscribe()
             .disposed(by: disposeBag)
