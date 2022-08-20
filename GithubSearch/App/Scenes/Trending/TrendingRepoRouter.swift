@@ -8,7 +8,7 @@
 import UIKit
 import RxSwift
 
-class TrendingRepoContext: AlertContext {
+class TrendingRepoContext: GenericContext {
     let showDetail = PublishSubject<TrendingRepoListViewModel.StandardItem>()
 }
 

@@ -14,7 +14,7 @@ class AppContext {
     let shoOptionsAlert = PublishSubject<Void>()
 }
 
-class AlertContext {
+class GenericContext {
     let showMessage = PublishSubject<String>()
     let disposeFlow = PublishSubject<Void>()
 }

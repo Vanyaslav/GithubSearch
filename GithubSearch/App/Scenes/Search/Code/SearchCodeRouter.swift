@@ -8,7 +8,7 @@
 import UIKit
 import RxSwift
 
-class SearchCodeContext: AlertContext {}
+class SearchCodeContext: GenericContext {}
 
 class SearchCodeRouter: Router {
     let disposeBag = CompositeDisposable()
