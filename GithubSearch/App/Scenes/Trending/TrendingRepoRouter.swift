@@ -23,7 +23,8 @@ class TrendingRepoRouter: Router {
     init(with navigationController: UINavigationController? = nil,
          context: TrendingRepoContext = TrendingRepoContext(),
          dependency: AppDefaults.Dependency,
-         splitController: UISplitViewController? = nil) {
+         splitController: UISplitViewController? = nil
+    ) {
         self.navigationController = navigationController ?? UINavigationController()
         self.context = context
         self.dependency = dependency

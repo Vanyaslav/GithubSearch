@@ -137,7 +137,13 @@ extension GithubService {
                 default:
                     throw Error.other
                 }
-            }.observe(on: MainScheduler.instance)
-            .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .default))
+            }.retry { errors in
+                return errors.enumerated().flatMap{ (index, error) -> Observable<Int> in
+                    return index < 5
+                    ? Observable<Int>.timer(RxTimeInterval.seconds(5),
+                                            scheduler: MainScheduler.instance)
+                    : Observable.error(error)
+                }
+            }
     }
 }
