@@ -108,9 +108,8 @@ class SearchCodeViewModel {
 
         let bindUI: (Driver<State>) -> Signal<Event> = bind(self) { me, state in
             let subscriptions = [
-                state.map { $0.lastError?.errorDescription }
+                state.compactMap { $0.lastError?.errorDescription }
                     .asObservable()
-                    .unwrap()
                     .bind(to: context.showMessage),
                 state.map { $0.results }
                     .drive(me.data),

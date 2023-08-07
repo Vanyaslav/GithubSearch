@@ -26,7 +26,8 @@ class MenuRouter: Router {
     
     init(with nc: UINavigationController,
          context: MenuContext = .init(),
-         dependency: AppDefaults.Dependency) {
+         dependency: AppDefaults.Dependency
+    ) {
         self.navigationController = nc
         self.context = context
         self.dependency = dependency
@@ -40,11 +41,10 @@ class MenuRouter: Router {
     
     func run(with style: AppType) {
         context.selectedItem
-            .map { [self] item in
+            .compactMap { [self] item in
                 AppType.FlowType(with: item)
                     .router(dependency: dependency,
                             splitController: splitController) }
-            .unwrap()
             .withPrevious()
             .map { (previousRouter, router) in
                 if let pRouter = previousRouter {
