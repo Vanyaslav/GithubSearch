@@ -18,6 +18,8 @@
 		A11C6728279C01080018E596 /* RxFeedback in Frameworks */ = {isa = PBXBuildFile; productRef = A11C6727279C01080018E596 /* RxFeedback */; };
 		A11C672B279C34C60018E596 /* SearchRepoRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11C672A279C34C60018E596 /* SearchRepoRouter.swift */; };
 		A1227CBE278884D7005BC286 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1227CBD278884D7005BC286 /* LaunchScreen.storyboard */; };
+		A12889C82A817AE200185A3B /* InitialViewController+Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12889C72A817AE200185A3B /* InitialViewController+Constraints.swift */; };
+		A12889CA2A817C0500185A3B /* InitialViewController+LoadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12889C92A817C0500185A3B /* InitialViewController+LoadView.swift */; };
 		A149621527882DA30017F68D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A149621427882DA30017F68D /* AppDelegate.swift */; };
 		A149621927882DA30017F68D /* InitialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A149621827882DA30017F68D /* InitialViewController.swift */; };
 		A149621E27882DA80017F68D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A149621D27882DA80017F68D /* Assets.xcassets */; };
@@ -94,6 +96,8 @@
 		A11C672A279C34C60018E596 /* SearchRepoRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRepoRouter.swift; sourceTree = "<group>"; };
 		A1227CBD278884D7005BC286 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A1227CC0278885E2005BC286 /* GithubSearch-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GithubSearch-Info.plist"; sourceTree = "<group>"; };
+		A12889C72A817AE200185A3B /* InitialViewController+Constraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InitialViewController+Constraints.swift"; sourceTree = "<group>"; };
+		A12889C92A817C0500185A3B /* InitialViewController+LoadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InitialViewController+LoadView.swift"; sourceTree = "<group>"; };
 		A149621127882DA30017F68D /* GithubSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GithubSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A149621427882DA30017F68D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A149621827882DA30017F68D /* InitialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialViewController.swift; sourceTree = "<group>"; };
@@ -185,6 +189,8 @@
 			isa = PBXGroup;
 			children = (
 				A149621827882DA30017F68D /* InitialViewController.swift */,
+				A12889C92A817C0500185A3B /* InitialViewController+LoadView.swift */,
+				A12889C72A817AE200185A3B /* InitialViewController+Constraints.swift */,
 				A10062CF2788462300E9C697 /* InitialViewModel.swift */,
 			);
 			path = Initial;
@@ -620,6 +626,7 @@
 				A194F5402789BD4A00E7FD8C /* TrendingRepoListViewModel.swift in Sources */,
 				A1ED877D2788AF72001254B1 /* TrendingRepoListViewController.swift in Sources */,
 				A1E135E127A28F28005A18F2 /* SearchCodeViewModel.swift in Sources */,
+				A12889CA2A817C0500185A3B /* InitialViewController+LoadView.swift in Sources */,
 				A10062D2278846DA00E9C697 /* ApplicationProtocol.swift in Sources */,
 				A1E135DD27A28CA2005A18F2 /* SearchCodeRouter.swift in Sources */,
 				A1ED878A2788BE41001254B1 /* NSMutableAttributedString+Ext.swift in Sources */,
@@ -633,6 +640,7 @@
 				A1DE39A028AF813500928426 /* AppType.FlowType+Routes.swift in Sources */,
 				A10062D02788462300E9C697 /* InitialViewModel.swift in Sources */,
 				A1ED87762788AA62001254B1 /* UIDevice+Ext.swift in Sources */,
+				A12889C82A817AE200185A3B /* InitialViewController+Constraints.swift in Sources */,
 				A1E135DF27A28D7D005A18F2 /* SearchCodeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
