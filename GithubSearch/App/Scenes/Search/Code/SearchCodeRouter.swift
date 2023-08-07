@@ -39,6 +39,7 @@ class SearchCodeRouter: Router {
         case .tabBar:
             navigationController
                 .setViewControllers([view], animated: true)
+            
         case .menu:
             guard let splitController = splitController
             else { return }
@@ -46,10 +47,14 @@ class SearchCodeRouter: Router {
                 .setViewControllers([view], animated: true)
             splitController
                 .showDetailViewController(navigationController, sender: nil)
+            
         case .flow(type: .search(type: .code)):
             navigationController
                 .pushViewController(view, animated: true)
-        default:
+            
+        case .flow(type: .search(type: .repo)),
+             .flow(type: .trending),
+             .flow(type: .undefined):
             return
         }
         

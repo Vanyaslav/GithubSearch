@@ -38,6 +38,7 @@ class TrendingRepoRouter: Router {
         case .tabBar:
             navigationController
                 .setViewControllers([view], animated: true)
+            
         case .menu:
             guard let splitController = splitController
             else { return }
@@ -45,10 +46,14 @@ class TrendingRepoRouter: Router {
                 .setViewControllers([view], animated: true)
             splitController
                 .showDetailViewController(navigationController, sender: nil)
+            
         case .flow(type: .trending) :
             navigationController
                 .pushViewController(view, animated: true)
-        default:
+            
+        case .flow(type: .search(type: .repo)),
+             .flow(type: .search(type: .code)),
+             .flow(type: .undefined):
             return
         }
 

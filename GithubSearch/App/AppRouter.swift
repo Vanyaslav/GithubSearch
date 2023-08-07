@@ -61,6 +61,10 @@ class AppRouter: Router, ApplicationProtocol {
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
     }
+    
+    deinit {
+        print("\(self) deinit")
+    }
 
     func run(with style: AppType = .tabBar) {
         let model = InitialViewModel(with: context)

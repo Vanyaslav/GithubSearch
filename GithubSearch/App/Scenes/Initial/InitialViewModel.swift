@@ -45,4 +45,8 @@ class InitialViewModel {
             .bind(to: context.showOptionsAlert)
             .disposed(by: disposeBag)
     }
+    
+    deinit {
+        print("\(self) deinit")
+    }
 }
