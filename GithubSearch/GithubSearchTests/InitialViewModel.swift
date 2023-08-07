@@ -21,27 +21,27 @@ class InitialViewModelTest: XCTestCase {
         self.viewModel = InitialViewModel(with: context)
     }
 
-    func testInitialViewModelPrivacy() throws {
+    func testInitialViewModelPrivacy() {
         viewModel.navigateTo.onNext(.mainWebSite)
 
         context.showWebSite
-            .bind { XCTAssertEqual($0, InitialViewModel.Linx.mainWebSite.rawValue) }
+            .bind { XCTAssertEqual($0, "https://github.com") }
             .disposed(by: disposeBag!)
     }
 
-    func testInitialViewModelTerms() throws {
+    func testInitialViewModelTerms() {
         viewModel.navigateTo.onNext(.infoSite)
 
         context.showWebSite
-            .bind { XCTAssertEqual($0, InitialViewModel.Linx.infoSite.rawValue) }
+            .bind { XCTAssertEqual($0, "https://github.com/about") }
             .disposed(by: disposeBag!)
     }
 
-    func testInitialViewModelCompanyWebSite() throws {
+    func testInitialViewModelCompanyWebSite() {
         viewModel.navigateTo.onNext(.docsSite)
 
         context.showWebSite
-            .bind { XCTAssertEqual($0, InitialViewModel.Linx.docsSite.rawValue) }
+            .bind { XCTAssertEqual($0, "https://docs.github.com/en") }
             .disposed(by: disposeBag!)
     }
 }
