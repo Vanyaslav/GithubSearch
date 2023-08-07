@@ -10,7 +10,7 @@ import UIKit
 extension InitialViewController {
     var mainButtonHeight: CGFloat { 48 }
     
-    var mainWebContraints: [NSLayoutConstraint] {
+    var mainWebConstraints: [NSLayoutConstraint] {
         [
             mainWebSiteButton.topAnchor
                 .constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
@@ -21,7 +21,7 @@ extension InitialViewController {
         ]
     }
     
-    var mainSymbolViewContraints: [NSLayoutConstraint] {
+    var mainSymbolViewConstraints: [NSLayoutConstraint] {
         [
             mainSymbolView.topAnchor
                 .constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor,
@@ -35,7 +35,7 @@ extension InitialViewController {
         ]
     }
     
-    var mainTitleLabelContraints: [NSLayoutConstraint] {
+    var mainTitleLabelConstraints: [NSLayoutConstraint] {
         [
             mainTitleLabel.topAnchor
                 .constraint(equalTo: mainSymbolView.bottomAnchor,
@@ -51,7 +51,7 @@ extension InitialViewController {
         ]
     }
     
-    var descriptionLabelContraints: [NSLayoutConstraint] {
+    var descriptionLabelConstraints: [NSLayoutConstraint] {
         [
             descriptionLabel.topAnchor
                 .constraint(equalTo: mainTitleLabel.bottomAnchor,
@@ -64,7 +64,7 @@ extension InitialViewController {
         ]
     }
     
-    var enterAppButtonContraints: [NSLayoutConstraint] {
+    var enterAppButtonConstraints: [NSLayoutConstraint] {
         [
             enterAppButton.bottomAnchor
                 .constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,
@@ -78,7 +78,7 @@ extension InitialViewController {
         ]
     }
         
-    var bottomInfoViewContraints: [NSLayoutConstraint] {
+    var bottomInfoViewConstraints: [NSLayoutConstraint] {
         [
             bottomInfoView.centerXAnchor
                 .constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),

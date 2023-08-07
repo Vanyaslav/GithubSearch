@@ -33,12 +33,12 @@ extension InitialViewController {
             .forEach(view.addSubview)
 
         NSLayoutConstraint.activate([
-            mainWebContraints,
-            mainSymbolViewContraints,
-            mainTitleLabelContraints,
-            descriptionLabelContraints,
-            enterAppButtonContraints,
-            bottomInfoViewContraints
+            mainWebConstraints,
+            mainSymbolViewConstraints,
+            mainTitleLabelConstraints,
+            descriptionLabelConstraints,
+            enterAppButtonConstraints,
+            bottomInfoViewConstraints
         ]
             .flatMap { $0 })
     }
